@@ -188,7 +188,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 86</div>
+  <div class="sub" style="margin-top:12px">build 87</div>
 </section>
 
 <script>
@@ -555,7 +555,7 @@ function drawRt(){
   $('rtBus').className=rtOpen==='bus'?'':'ghost';$('rtWalk').className=rtOpen==='walk'?'':'ghost';
   if(!rtOpen){o.innerHTML='';return;}
   if(!a){o.innerHTML='<div class="sub" style="margin-top:12px">No saved route for this arrival time. Pick 7:30, 7:45, 8:00 or 8:15.</div>';return;}
-  o.innerHTML='<div class="rt">'+a[rtOpen].map(function(r){return '<div class="r"><b>'+r[0]+'</b><div>'+r[1]+'<small>'+r[2]+'</small></div></div>';}).join('')+'<div class="sub" style="margin-top:8px">To work, Monday TTC schedule</div></div>';
+  o.innerHTML='<div class="rt">'+a[rtOpen].map(function(r){return '<div class="r"><b>'+r[0]+'</b><div>'+r[1]+'<small>'+r[2]+'</small></div></div>';}).join('')+'</div>';
 }
 $('rtBus').addEventListener('click',function(){rtOpen=rtOpen==='bus'?'':'bus';S.rt=rtOpen;save();drawRt();update();});
 $('rtWalk').addEventListener('click',function(){rtOpen=rtOpen==='walk'?'':'walk';S.rt=rtOpen;save();drawRt();update();});
