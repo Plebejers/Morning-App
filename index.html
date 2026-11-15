@@ -188,7 +188,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 87</div>
+  <div class="sub" style="margin-top:12px">build 88</div>
 </section>
 
 <script>
@@ -317,9 +317,14 @@ function advice(feels,hi,lo,rain,snow,wind){
   if(hi-lo>=10){items.push('Layers: swings '+Math.round(lo)+' to '+Math.round(hi)+' °C today');}
   return{top:top,items:items};
 }
-function showWear(feels,hi,lo,rain,snow,wind){
+function wearBlock(title,a,note){
+  return '<div class="st">'+title+'</div>'+(note?'<div class="sub" style="margin-top:4px">'+esc(note)+'</div>':'')+'<div style="margin-top:8px;font-weight:600">'+a.top+'</div><div class="chips">'+a.items.map(function(i){return '<span class="chip">'+esc(i)+'</span>';}).join('')+'</div>';
+}
+function showWear(feels,hi,lo,rain,snow,wind,tmr){
   var a=advice(feels,hi,lo,rain,snow,wind);
-  $('wear').innerHTML='<div class="st">What to wear</div><div style="margin-top:8px;font-weight:600">'+a.top+'</div><div class="chips">'+a.items.map(function(i){return '<span class="chip">'+esc(i)+'</span>';}).join('')+'</div>';
+  var html=wearBlock('What to wear now',a);
+  if(tmr)html+=wearBlock('What to wear tomorrow',advice(tmr.feels,tmr.hi,tmr.lo,tmr.rain,tmr.snow,tmr.wind),'Around '+tmr.at);
+  $('wear').innerHTML=html;
 }
 function manual(msg){
   $('manual').classList.remove('hide');
@@ -387,7 +392,12 @@ function render(w){
   if(c.wind_speed_10m>=40)al.push('Strong wind: '+Math.round(c.wind_speed_10m)+' km/h.');
   $('wxAlert').innerHTML=al.map(function(t){return '<div class="alert">'+esc(t)+'</div>';}).join('');
   $('manual').classList.add('hide');
-  showWear(feels,d.temperature_2m_max[0],d.temperature_2m_min[0],rain,snow,c.wind_speed_10m);
+  var tmr=null;
+  if(h.apparent_temperature.length>=48&&d.temperature_2m_max.length>1){
+    var ti=Math.min(47,24+Math.min(23,Math.max(0,lvH)));
+    tmr={feels:h.apparent_temperature[ti],hi:d.temperature_2m_max[1],lo:d.temperature_2m_min[1],rain:h.precipitation_probability[ti]||0,snow:isSnow(h.weather_code[ti]),wind:(d.wind_speed_10m_max&&d.wind_speed_10m_max[1])||0,at:fmt((ti-24)*60)};
+  }
+  showWear(feels,d.temperature_2m_max[0],d.temperature_2m_min[0],rain,snow,c.wind_speed_10m,tmr);
 }
 function fetchForecast(){
   return getJSON('https://api.open-meteo.com/v1/forecast?latitude='+S.lat+'&longitude='+S.lon+'&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,is_day&daily=sunrise,sunset,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,uv_index_max&timezone=auto&forecast_days=2').then(function(w){
