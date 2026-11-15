@@ -188,13 +188,13 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 85</div>
+  <div class="sub" style="margin-top:12px">build 86</div>
 </section>
 
 <script>
 (function(){
 var KEY='morning-v1';
-var DEF={proxy:'',stk:'',arrive:'08:00',commute:25,buffer:10,home:'',work:'',mode:'driving',city:'',lat:null,lon:null,
+var DEF={rt:'',proxy:'',stk:'',arrive:'08:00',commute:25,buffer:10,home:'',work:'',mode:'driving',city:'',lat:null,lon:null,
  v:2,wake:'06:30',notes:'',
  steps:[{n:'Get up, water',m:1},{n:'Shower',m:10},{n:'Get dressed',m:5},{n:'Pack bag and lunch',m:1},{n:'Breakfast and coffee',m:0,flex:true}],
  done:{date:'',ids:[]}};
@@ -213,7 +213,7 @@ function fmt(m){m=((Math.round(m)%1440)+1440)%1440;var h=Math.floor(m/60),mm=m%6
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 var editing=false,forceRender=false;
 function rerender(){forceRender=true;$('steps').removeAttribute('data-sig');update();forceRender=false;}
-$('arr').addEventListener('click',function(e){var t=e.target.getAttribute('data-t');if(!t)return;S.arrive=t;$('arrive').value=t;save();update();drawRt();});
+$('arr').addEventListener('click',function(e){var t=e.target.getAttribute('data-t');if(!t)return;S.arrive=t;$('arrive').value=t;save();drawRt();update();});
 ['toWork','toHome'].forEach(function(id){$(id).addEventListener('click',function(e){var k=id==='toWork'?'work':'home';if(!S[k]){e.preventDefault();$(k).focus();}});});
 
 // inputs
@@ -228,7 +228,7 @@ function nextArrival(now){
   while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);
   return d;
 }
-function leaveMin(){return toMin(S.arrive)-S.commute-S.buffer;}
+function leaveMin(){var a=(typeof RT!=='undefined'&&typeof rtOpen!=='undefined'&&rtOpen&&RT[S.arrive])?RT[S.arrive][rtOpen]:null;if(a){var p=a[0][0].split(':');return (+p[0])*60+(+p[1])-10;}return toMin(S.arrive)-S.commute-S.buffer;}
 function totalSteps(){return S.steps.reduce(function(a,s){return a+(s.flex?0:(+s.m||0));},0);}
 function stepMin(s){return s.flex?Math.max(0,Math.round(leaveMin()-toMin(S.wake)-totalSteps())):(+s.m||0);}
 
@@ -549,7 +549,7 @@ var RT={
  walk:[['7:36','25B toward Broadview Station','from stop 15989, 11 stops, off at Don Mills Rd at The Donway West 7:50'],['7:50','Walk 20 min (1.5 km) to work','arrive 8:10']],
  bus:[['7:45','25B toward Broadview Station','from stop 15989, 2 stops, off at 2040 Don Mills Rd 7:51'],['7:51','Walk 1 min to Duncan Mill Rd at Don Mills Rd West','stop 9776'],['7:56','122 Graydon Hall to York Mills Station','8 stops, off at York Mills Rd at Scarsdale Rd West 8:04'],['8:04','Walk 10 min (750 m) to work','arrive 8:14']]}
 };
-var rtOpen='';
+var rtOpen=S.rt||'';
 function drawRt(){
   var o=$('rtOut'),a=RT[S.arrive];
   $('rtBus').className=rtOpen==='bus'?'':'ghost';$('rtWalk').className=rtOpen==='walk'?'':'ghost';
@@ -557,10 +557,10 @@ function drawRt(){
   if(!a){o.innerHTML='<div class="sub" style="margin-top:12px">No saved route for this arrival time. Pick 7:30, 7:45, 8:00 or 8:15.</div>';return;}
   o.innerHTML='<div class="rt">'+a[rtOpen].map(function(r){return '<div class="r"><b>'+r[0]+'</b><div>'+r[1]+'<small>'+r[2]+'</small></div></div>';}).join('')+'<div class="sub" style="margin-top:8px">To work, Monday TTC schedule</div></div>';
 }
-$('rtBus').addEventListener('click',function(){rtOpen=rtOpen==='bus'?'':'bus';drawRt();});
-$('rtWalk').addEventListener('click',function(){rtOpen=rtOpen==='walk'?'':'walk';drawRt();});
+$('rtBus').addEventListener('click',function(){rtOpen=rtOpen==='bus'?'':'bus';S.rt=rtOpen;save();drawRt();update();});
+$('rtWalk').addEventListener('click',function(){rtOpen=rtOpen==='walk'?'':'walk';S.rt=rtOpen;save();drawRt();update();});
 drawRt();
-$('arrive').addEventListener('input',drawRt);
+$('arrive').addEventListener('input',function(){drawRt();update();});
 (function(){
 var FK=KEY+'-fold',fs={};try{fs=JSON.parse(localStorage.getItem(FK))||{};}catch(e){}
 Array.prototype.forEach.call(document.querySelectorAll('.card'),function(c){
