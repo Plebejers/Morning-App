@@ -88,6 +88,11 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .rng{display:flex;gap:6px;margin-top:10px}
 .rng button{margin:0;width:auto;padding:3px 9px 4px;background:transparent;color:var(--tx);border:1px solid var(--line);font:400 16px/1.05 'NDot','Doto',monospace;letter-spacing:0;text-transform:none}
 .rng button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.rt{margin-top:14px;border-top:1px dotted var(--line)}
+.rt .r{display:flex;gap:12px;padding:9px 0;border-bottom:1px dotted var(--line);font-size:14px;line-height:1.35}
+.rt .r b{flex:0 0 52px;font:400 18px/1.1 'NDot','Doto',monospace}
+.rt .r small{display:block;color:var(--mu);font-size:11px;margin-top:2px}
+#rtBtns button.ghost{background:transparent}
 </style>
 </head>
 <body>
@@ -99,6 +104,8 @@ input,textarea{-webkit-user-select:text;user-select:text}
   <div id="go" style="display:flex;flex-direction:column;margin-bottom:14px">
     <a class="btn" id="toWork" href="#" target="_blank" rel="noopener">To work</a>
     <a class="btn" id="toHome" href="#" target="_blank" rel="noopener">To home</a>
+    <div id="rtBtns" style="display:flex;gap:10px"><button type="button" id="rtBus" style="flex:1">Bus</button><button type="button" id="rtWalk" style="flex:1">Walk</button></div>
+    <div id="rtOut"></div>
   </div>
 
   <div style="margin-top:18px"><div class="big" id="leaveBy">--:--</div>
@@ -181,7 +188,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 83</div>
+  <div class="sub" style="margin-top:12px">build 84</div>
 </section>
 
 <script>
@@ -206,7 +213,7 @@ function fmt(m){m=((Math.round(m)%1440)+1440)%1440;var h=Math.floor(m/60),mm=m%6
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 var editing=false,forceRender=false;
 function rerender(){forceRender=true;$('steps').removeAttribute('data-sig');update();forceRender=false;}
-$('arr').addEventListener('click',function(e){var t=e.target.getAttribute('data-t');if(!t)return;S.arrive=t;$('arrive').value=t;save();update();});
+$('arr').addEventListener('click',function(e){var t=e.target.getAttribute('data-t');if(!t)return;S.arrive=t;$('arrive').value=t;save();update();drawRt();});
 ['toWork','toHome'].forEach(function(id){$(id).addEventListener('click',function(e){var k=id==='toWork'?'work':'home';if(!S[k]){e.preventDefault();$(k).focus();}});});
 
 // inputs
@@ -527,6 +534,33 @@ $('stkGo').addEventListener('click',stkSearch);
 $('stkOut').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){stkRange(r);}});
 $('stkIn').addEventListener('keydown',function(e){if(e.key==='Enter')stkSearch();});
 if(S.stk){$('stkIn').value=S.stk;if(S.proxy)stkSearch();}
+
+var RT={
+'07:30':{
+ walk:[['6:50','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['6:53','25B toward Broadview Station','11 stops, off at Don Mills Rd at The Donway West 7:07'],['7:07','Walk 20 min (1.5 km) to work','arrive 7:27']],
+ bus:[['6:43','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['6:46','25B toward Broadview Station','2 stops, off at 2040 Don Mills Rd 6:52'],['6:52','Walk 1 min to Duncan Mill Rd at Don Mills Rd West','stop 9776'],['7:02','122 Graydon Hall to York Mills Station','8 stops, off at York Mills Rd at Scarsdale Rd West 7:08'],['7:08','Walk 10 min (750 m) to work','arrive 7:18']]},
+'07:45':{
+ walk:[['7:06','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['7:09','25B toward Broadview Station','11 stops, off at Don Mills Rd at The Donway West 7:23'],['7:23','Walk 20 min (1.5 km) to work','arrive 7:43']],
+ bus:[['7:06','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['7:09','25B toward Broadview Station','2 stops, off at 2040 Don Mills Rd 7:15'],['7:15','Walk 1 min to Duncan Mill Rd at Don Mills Rd West','stop 9776'],['7:26','122 Graydon Hall to York Mills Station','8 stops, off at York Mills Rd at Scarsdale Rd West 7:34'],['7:34','Walk 10 min (750 m) to work','arrive 7:44']]},
+'08:00':{
+ walk:[['7:15','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['7:18','25B toward Broadview Station','11 stops, off at Don Mills Rd at The Donway West 7:32'],['7:32','Walk 20 min (1.5 km) to work','arrive 7:52']],
+ bus:[['7:24','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['7:27','25B toward Broadview Station','2 stops, off at 2040 Don Mills Rd 7:33'],['7:33','Walk 1 min to Duncan Mill Rd at Don Mills Rd West','stop 9776'],['7:41','122 Graydon Hall to York Mills Station','8 stops, off at York Mills Rd at Scarsdale Rd West 7:49'],['7:49','Walk 10 min (750 m) to work','arrive 7:59']]},
+'08:15':{
+ walk:[['7:33','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['7:36','25B toward Broadview Station','11 stops, off at Don Mills Rd at The Donway West 7:50'],['7:50','Walk 20 min (1.5 km) to work','arrive 8:10']],
+ bus:[['7:42','Walk 3 min to Don Mills Rd at Helen Lu Rd','stop 15989'],['7:45','25B toward Broadview Station','2 stops, off at 2040 Don Mills Rd 7:51'],['7:51','Walk 1 min to Duncan Mill Rd at Don Mills Rd West','stop 9776'],['7:56','122 Graydon Hall to York Mills Station','8 stops, off at York Mills Rd at Scarsdale Rd West 8:04'],['8:04','Walk 10 min (750 m) to work','arrive 8:14']]}
+};
+var rtOpen='';
+function drawRt(){
+  var o=$('rtOut'),a=RT[S.arrive];
+  $('rtBus').className=rtOpen==='bus'?'':'ghost';$('rtWalk').className=rtOpen==='walk'?'':'ghost';
+  if(!rtOpen){o.innerHTML='';return;}
+  if(!a){o.innerHTML='<div class="sub" style="margin-top:12px">No saved route for this arrival time. Pick 7:30, 7:45, 8:00 or 8:15.</div>';return;}
+  o.innerHTML='<div class="rt">'+a[rtOpen].map(function(r){return '<div class="r"><b>'+r[0]+'</b><div>'+r[1]+'<small>'+r[2]+'</small></div></div>';}).join('')+'<div class="sub" style="margin-top:8px">To work, Monday TTC schedule</div></div>';
+}
+$('rtBus').addEventListener('click',function(){rtOpen=rtOpen==='bus'?'':'bus';drawRt();});
+$('rtWalk').addEventListener('click',function(){rtOpen=rtOpen==='walk'?'':'walk';drawRt();});
+drawRt();
+$('arrive').addEventListener('input',drawRt);
 (function(){
 var FK=KEY+'-fold',fs={};try{fs=JSON.parse(localStorage.getItem(FK))||{};}catch(e){}
 Array.prototype.forEach.call(document.querySelectorAll('.card'),function(c){
