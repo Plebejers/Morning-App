@@ -193,7 +193,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 98</div>
+  <div class="sub" style="margin-top:12px">build 99</div>
 </section>
 
 <script>
@@ -327,7 +327,7 @@ function wearBlock(title,a,note){
 }
 function showWear(feels,hi,lo,rain,snow,wind,tmr){
   var a=advice(feels,hi,lo,rain,snow,wind);
-  var html=wearBlock('What to wear now',a);
+  var html=wearBlock('What to wear today',a);
   if(tmr)html+=wearBlock('What to wear tomorrow',advice(tmr.feels,tmr.hi,tmr.lo,tmr.rain,tmr.snow,tmr.wind));
   $('wear').innerHTML=html;
 }
