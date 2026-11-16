@@ -193,7 +193,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 93</div>
+  <div class="sub" style="margin-top:12px">build 94</div>
 </section>
 
 <script>
@@ -503,8 +503,9 @@ function loadMarkets(){
 function loadRecap(){
   fetch('recap.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
     var d=new Date(j.d+'T12:00:00'),lbl=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
-    $('rcOut').innerHTML='<div class="sub">Close of '+esc(lbl)+'</div><div style="margin-top:8px;line-height:1.5">'+esc(j.text)+'</div>'
-      +(j.tone?'<div class="st">Sentiment</div><div style="margin-top:8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:'+(j.tone==='bullish'?'#1fb85a':j.tone==='bearish'?'#e5392e':'inherit')+'">'+esc(j.label||j.tone)+'</div>'+(j.mood?'<div style="margin-top:6px;line-height:1.5">'+esc(j.mood)+'</div>':''):j.mood?'<div class="st">Sentiment</div><div style="margin-top:8px;line-height:1.5">'+esc(j.mood)+'</div>':'')
+    var col=j.tone==='bullish'?'#1fb85a':j.tone==='bearish'?'#e5392e':'inherit';
+    var lead=(j.tone?'<b style="color:'+col+'">'+esc(j.label||j.tone)+'.</b> ':'')+(j.mood?esc(j.mood)+' ':'');
+    $('rcOut').innerHTML='<div class="sub">Close of '+esc(lbl)+'</div><div style="margin-top:8px;line-height:1.5">'+lead+esc(j.text)+'</div>'
       +(j.veqt?'<div class="st">For VEQT</div><div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>':'');
   }).catch(function(){});
 }
