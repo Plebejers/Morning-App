@@ -93,12 +93,27 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .rt .r b{flex:0 0 52px;font:400 18px/1.1 'NDot','Doto',monospace}
 .rt .r small{display:block;color:var(--mu);font-size:11px;margin-top:2px}
 #rtBtns button.ghost{background:transparent}
+
+html,body{height:100%}
+body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-direction:column;height:100dvh}
+#tabs{position:relative;display:flex;margin:calc(10px + env(safe-area-inset-top)) auto 8px;width:min(calc(100% - 32px),488px);background:var(--card);border-radius:999px;padding:4px;flex:0 0 auto}
+#tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .25s ease}
+#tabs .tab.on{color:var(--bg)}
+#pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);background:var(--tx);border-radius:999px;will-change:transform}
+#pager{flex:1 1 0;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+#pager::-webkit-scrollbar{display:none}
+.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:6px 16px calc(32px + env(safe-area-inset-bottom));will-change:transform,opacity}
+.pg .in{max-width:520px;margin:0 auto}
+@media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 </style>
 </head>
 <body>
 <h1 id="greet" class="hide">Good morning</h1>
 <div id="clock" class="hide">--:--</div>
 
+<nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Morning</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Notes</div></nav>
+<div id="pager">
+<div class="pg"><div class="in">
 <section class="card">
   <div id="chead"><h2>Commute</h2><div id="arr"><button data-t="07:30">7:30</button><button data-t="07:45">7:45</button><button data-t="08:00">8:00</button><button data-t="08:15">8:15</button></div></div>
   <div id="go" style="display:flex;flex-direction:column;margin-bottom:14px">
@@ -140,7 +155,8 @@ input,textarea{-webkit-user-select:text;user-select:text}
     <button class="ghost sm" id="resetBtn">Reset today</button>
   </div>
 </section>
-
+</div></div>
+<div class="pg"><div class="in">
 <section class="card">
   <h2>Markets</h2>
   <div id="mkVeqt"></div>
@@ -164,7 +180,8 @@ input,textarea{-webkit-user-select:text;user-select:text}
   <h2>News</h2>
   <div id="gNews"></div>
 </section>
-
+</div></div>
+<div class="pg"><div class="in">
 <section class="card">
   <h2>Notes</h2>
   <textarea id="notes" rows="5" placeholder="Write something..."></textarea>
@@ -193,8 +210,10 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 99</div>
+  <div class="sub" style="margin-top:12px">build 100</div>
 </section>
+</div></div>
+</div>
 
 <script>
 (function(){
@@ -608,6 +627,30 @@ Array.prototype.forEach.call(document.querySelectorAll('.card'),function(c){
 })();
 update();setInterval(update,15000);
 if(S.lat!==null||S.city)loadWeather();else useLocation();
+})();
+
+(function(){
+  var pager=document.getElementById('pager'),pill=document.getElementById('pill'),tabs=[].slice.call(document.querySelectorAll('#tabs .tab')),pgs=[].slice.call(document.querySelectorAll('.pg'));
+  var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,tick=false;
+  function paint(){
+    tick=false;
+    var w=pager.clientWidth||1,p=pager.scrollLeft/w;
+    pill.style.transform='translateX('+(p*100)+'%)';
+    var cur=Math.round(p);
+    tabs.forEach(function(t,i){t.classList.toggle('on',i===cur);});
+    if(calm)return;
+    pgs.forEach(function(g,i){
+      var d=Math.min(1,Math.abs(i-p));
+      g.style.opacity=(1-d*.55).toFixed(3);
+      g.style.transform='scale('+(1-d*.04).toFixed(4)+')';
+    });
+  }
+  pager.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(paint);}},{passive:true});
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    pager.scrollTo({left:(+t.getAttribute('data-i'))*pager.clientWidth,behavior:calm?'auto':'smooth'});
+  });});
+  window.addEventListener('resize',paint);
+  paint();
 })();
 </script>
 </body>
