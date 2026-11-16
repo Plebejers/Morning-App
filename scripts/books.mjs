@@ -49,14 +49,14 @@ function parse(raw) {
     const t = lines[i].trim();
     if (!t || t.length > 110) continue;
     let m;
-    if ((m = /^PART\s+([IVX]+)\.?\s*$/i.exec(t))) { ev.push({ i, k: 'part', v: 'Part ' + m[1].toUpperCase(), end: i + 1 }); continue; }
-    if (/^EPILOGUE\.?$/i.test(t)) { ev.push({ i, k: 'part', v: 'Epilogue', epi: true, end: i + 1 }); continue; }
-    if ((m = /^BOOK\s+([IVX]+)\.?[\s\-:—]*(.*)$/i.exec(t))) {
+    if ((m = /^(?:PART|Part)\s+([IVX]+)\b\.?\s*$/.exec(t))) { ev.push({ i, k: 'part', v: 'Part ' + m[1].toUpperCase(), end: i + 1 }); continue; }
+    if (/^(?:EPILOGUE|Epilogue)\.?$/.test(t)) { ev.push({ i, k: 'part', v: 'Epilogue', epi: true, end: i + 1 }); continue; }
+    if ((m = /^(?:BOOK|Book)\s+([IVX]+)\b\.?[\s\-:—]*(.*)$/.exec(t))) {
       let title = m[2], end = i + 1;
       if (!title) { let j = i + 1; while (j < lines.length && !lines[j].trim()) j++; if (j - i <= 4 && lines[j].trim().length <= 100 && !/^(CHAPTER|BOOK|PART)\b/i.test(lines[j].trim())) { title = lines[j].trim(); end = j + 1; } }
       ev.push({ i, k: 'book', no: roman(m[1]), rn: m[1].toUpperCase(), v: clean(title), end }); continue;
     }
-    if ((m = /^CHAPTER\s+([IVX]+)\.?[\s\-:—]*(.*)$/i.exec(t))) {
+    if ((m = /^(?:CHAPTER|Chapter)\s+([IVX]+)\b\.?[\s\-:—]*(.*)$/.exec(t))) {
       let title = m[2], end = i + 1;
       if (!title) { let j = i + 1; while (j < lines.length && !lines[j].trim()) j++; if (j - i <= 4 && lines[j].trim().length <= 100) { title = lines[j].trim(); end = j + 1; } }
       ev.push({ i, k: 'chap', no: roman(m[1]), v: clean(title), end }); continue;
