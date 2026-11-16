@@ -109,7 +109,7 @@ function parse(raw) {
   const last = chapters[chapters.length - 1];
   if (last && !chapters.some((c) => c.title === 'Footnotes')) {
     const k = last.p.findIndex((q, i) => /^\[1\]\s/.test(q) && last.p.slice(i).every((r) => /^\[\d+\]/.test(r)));
-    if (k > 0) chapters.push({ label: '·', section: 'Notes', title: 'Footnotes', p: last.p.splice(k) });
+    if (k > 0) { chapters.push({ label: '·', section: 'Notes', title: 'Footnotes', p: last.p.splice(k) }); while (last.p.length && /^footnotes?$/i.test(last.p[last.p.length - 1])) last.p.pop(); }
   }
   return chapters;
 }
