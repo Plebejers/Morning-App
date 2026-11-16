@@ -106,7 +106,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 #pager::-webkit-scrollbar{display:none}
-.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:auto;padding:6px 16px calc(32px + env(safe-area-inset-bottom));will-change:transform,opacity}
+.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:6px 16px calc(32px + env(safe-area-inset-bottom));will-change:transform,opacity}
 .pg .in{max-width:520px;margin:0 auto}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
@@ -176,12 +176,15 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #rdCard[data-t="paper"]{--card:#fbfaf6;--card2:#efede6;--tx:#1b1b1b;--mu:#777;--line:#deddd5;--bg:#fbfaf6}
 #rdCard[data-t="night"]{--card:#15110d;--card2:#221c16;--tx:#cdbb98;--mu:#8c7d63;--line:#3a3128;--bg:#15110d}
 #rdCard{transition:background-color .35s ease,color .35s ease}
+
+#ptr{position:fixed;left:50%;top:0;z-index:30;transform:translate(-50%,-60px);padding:9px 16px;border-radius:999px;background:var(--tx);color:var(--bg);font:700 11px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;pointer-events:none;opacity:0;white-space:nowrap}
 </style>
 </head>
 <body>
 <h1 id="greet" class="hide">Good morning</h1>
 <div id="clock" class="hide">--:--</div>
 
+<div id="ptr">Pull to refresh</div>
 <div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Reading</div><div class="tab" data-i="2">Markets</div><div class="tab" data-i="3">Notes</div></nav></div></div></div>
 <div id="pager">
 <div class="pg"><div class="in">
@@ -291,7 +294,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 104</div>
+  <div class="sub" style="margin-top:12px">build 105</div>
 </section>
 </div></div>
 </div>
@@ -835,6 +838,37 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   }).catch(function(){head.innerHTML='<div class="sub">The library could not be loaded. Open the app online once to download it.</div>';});
 })();
 
+(function(){
+  var pager=document.getElementById('pager'),ind=document.getElementById('ptr');
+  if(!pager||!ind)return;
+  var y0=0,x0=0,g=null,pull=0,on=false,TH=90;
+  function reset(anim){ind.style.transition=anim?'transform .25s ease,opacity .25s ease':'none';ind.style.transform='translate(-50%,-60px)';ind.style.opacity='0';pull=0;on=false;g=null;}
+  pager.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1){g=null;return;}
+    var t=e.target.closest('.pg');g=t&&t.scrollTop<=0?t:null;
+    y0=e.touches[0].clientY;x0=e.touches[0].clientX;pull=0;on=false;
+  },{passive:true});
+  pager.addEventListener('touchmove',function(e){
+    if(!g)return;
+    var dy=e.touches[0].clientY-y0,dx=e.touches[0].clientX-x0;
+    if(!on){
+      if(g.scrollTop>0||dy<=8||Math.abs(dx)>Math.abs(dy)){if(dy<-4||Math.abs(dx)>Math.abs(dy)+10)g=null;return;}
+      on=true;
+    }
+    pull=Math.max(0,dy)*.5;
+    var p=Math.min(pull,TH+20);
+    ind.style.transition='none';
+    ind.style.transform='translate(-50%,'+(p-30)+'px)';
+    ind.style.opacity=String(Math.min(1,pull/TH));
+    ind.textContent=pull>=TH?'Release to refresh':'Pull to refresh';
+  },{passive:true});
+  function end(){
+    if(on&&pull>=TH){ind.textContent='Refreshing...';ind.style.transition='transform .2s ease';ind.style.transform='translate(-50%,24px)';ind.style.opacity='1';setTimeout(function(){location.reload();},150);return;}
+    if(on)reset(true);g=null;on=false;
+  }
+  pager.addEventListener('touchend',end,{passive:true});
+  pager.addEventListener('touchcancel',function(){if(on)reset(true);g=null;},{passive:true});
+})();
 (function(){
   var pager=document.getElementById('pager'),pill=document.getElementById('pill'),tabs=[].slice.call(document.querySelectorAll('#tabs .tab')),pgs=[].slice.call(document.querySelectorAll('.pg'));
   var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,tick=false;
