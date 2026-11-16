@@ -50,6 +50,7 @@ function parse(raw) {
     if (!t || t.length > 110) continue;
     let m;
     if ((m = /^(?:PART|Part)\s+([IVX]+)\b\.?\s*$/.exec(t))) { ev.push({ i, k: 'part', v: 'Part ' + m[1].toUpperCase(), end: i + 1 }); continue; }
+    if (/^(?:FROM THE AUTHOR|From the Author|From The Author)\.?$/.test(t)) { ev.push({ i, k: 'pre', v: 'From The Author', end: i + 1 }); continue; }
     if (/^(?:EPILOGUE|Epilogue)\.?$/.test(t)) { ev.push({ i, k: 'part', v: 'Epilogue', epi: true, end: i + 1 }); continue; }
     if ((m = /^(?:BOOK|Book)\s+([IVX]+)\b\.?[\s\-:—]*(.*)$/.exec(t))) {
       let title = m[2], end = i + 1;
@@ -68,6 +69,15 @@ function parse(raw) {
   let part = '', epi = false, book = null, started = false;
   for (let e = 0; e < ev.length; e++) {
     const x = ev[e];
+    if (x.k === 'pre') {
+      const nx = e + 1 < ev.length ? ev[e + 1].i : lines.length;
+      const pb = lines.slice(x.end, nx).join('\n');
+      if (pb.trim().length > 400) {
+        started = true;
+        chapters.push({ label: '·', section: 'Foreword', title: x.v, p: pb.split(/\n\s*\n/).map((q) => q.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean) });
+      }
+      continue;
+    }
     if (x.k === 'part') { part = x.v; epi = !!x.epi; book = null; continue; }
     if (x.k === 'book') { book = x; continue; }
     const nextI = e + 1 < ev.length ? ev[e + 1].i : lines.length;
