@@ -47,8 +47,8 @@ details#setup summary{list-style:none;cursor:pointer;display:flex;justify-conten
 details#setup summary::-webkit-details-marker{display:none}
 details#setup summary:after{content:'+';font-size:18px}
 details#setup[open] summary:after{content:'\2212'}
-#hourly{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:14px}
-@media (max-width:340px){#hourly{grid-template-columns:repeat(4,minmax(0,1fr))}}
+#hourly .hg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:10px}
+@media (max-width:340px){#hourly .hg{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .hr{background:var(--card2);border-radius:16px;padding:9px 0 7px;text-align:center;min-width:0}
 .hr .h{font:400 10px 'Space Mono',monospace;color:var(--mu);letter-spacing:.02em;white-space:nowrap}
 .hr svg{width:30px;height:30px;margin:8px auto;display:block;color:var(--tx)}
@@ -193,7 +193,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 96</div>
+  <div class="sub" style="margin-top:12px">build 97</div>
 </section>
 
 <script>
@@ -373,12 +373,13 @@ function iconSvg(name){
 function renderHourly(h){
   var el=$('hourly');
   if(!h||!h.temperature_2m){el.innerHTML='';return;}
-  var cur=new Date().getHours(),out='';
+  var cur=new Date().getHours(),td='',tm='';
   for(var i=cur;i<cur+20&&i<h.time.length;i++){
-    var hh=h.time[i].slice(11,13),p=h.precipitation_probability[i]||0,tm=i>=24;
-    out+='<div class="hr'+(i===cur?' now':'')+(tm?' tmr':'')+'"><div class="h">'+(i===cur?'NOW':tm?'TMR '+hh:hh+':00')+'</div>'+iconSvg(iconFor(h.weather_code[i],h.is_day?h.is_day[i]===1:(+hh>=7&&+hh<19)))+'<div class="d">'+Math.round(h.temperature_2m[i])+'&deg;</div><div class="p">'+(p>=10?p+'%':'')+'</div></div>';
+    var hh=h.time[i].slice(11,13),p=h.precipitation_probability[i]||0,nx=i>=24;
+    var cell='<div class="hr'+(i===cur?' now':'')+'"><div class="h">'+(i===cur?'NOW':hh+':00')+'</div>'+iconSvg(iconFor(h.weather_code[i],h.is_day?h.is_day[i]===1:(+hh>=7&&+hh<19)))+'<div class="d">'+Math.round(h.temperature_2m[i])+'&deg;</div><div class="p">'+(p>=10?p+'%':'')+'</div></div>';
+    if(nx)tm+=cell;else td+=cell;
   }
-  el.innerHTML=out;
+  el.innerHTML=(td?'<div class="st" style="margin-top:14px">Today</div><div class="hg">'+td+'</div>':'')+(tm?'<div class="st">Tomorrow</div><div class="hg">'+tm+'</div>':'');
 }
 function render(w){
   var c=w.current,d=w.daily,h=w.hourly;
