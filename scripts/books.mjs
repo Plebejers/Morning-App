@@ -105,6 +105,12 @@ function parse(raw) {
     if (epi) label = 'E.' + x.no;
     chapters.push({ label, section, title: x.v || ('Chapter ' + x.no), p: paras });
   }
+  // footnote list printed at the very end of the text: "[1] ..." paragraphs -> separate final section
+  const last = chapters[chapters.length - 1];
+  if (last && !chapters.some((c) => c.title === 'Footnotes')) {
+    const k = last.p.findIndex((q, i) => /^\[1\]\s/.test(q) && last.p.slice(i).every((r) => /^\[\d+\]/.test(r)));
+    if (k > 0) chapters.push({ label: '·', section: 'Notes', title: 'Footnotes', p: last.p.splice(k) });
+  }
   return chapters;
 }
 
