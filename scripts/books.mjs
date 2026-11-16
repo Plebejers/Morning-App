@@ -71,7 +71,13 @@ function parse(raw) {
     if (x.k === 'part') { part = x.v; epi = !!x.epi; book = null; continue; }
     if (x.k === 'book') { book = x; continue; }
     const nextI = e + 1 < ev.length ? ev[e + 1].i : lines.length;
-    const body = lines.slice(x.end, nextI).join('\n');
+    let body = lines.slice(x.end, nextI).join('\n');
+    // text between a Part/Book heading and its first chapter (e.g. a foreword) belongs to that chapter
+    const prev = ev[e - 1];
+    if (started && prev && prev.k !== 'chap') {
+      const gap = lines.slice(prev.end, x.i).join('\n');
+      if (gap.trim().length > 200) body = gap + '\n\n' + body;
+    }
     if (!started && body.trim().length < 400) continue;
     started = true;
     const paras = body.split(/\n\s*\n/)
