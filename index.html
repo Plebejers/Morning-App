@@ -193,7 +193,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 94</div>
+  <div class="sub" style="margin-top:12px">build 95</div>
 </section>
 
 <script>
@@ -506,7 +506,7 @@ function loadRecap(){
     var col=j.tone==='bullish'?'#1fb85a':j.tone==='bearish'?'#e5392e':'inherit';
     var lead=(j.tone?'<b style="color:'+col+'">'+esc(j.label||j.tone)+'.</b> ':'')+(j.mood?esc(j.mood)+' ':'');
     $('rcOut').innerHTML='<div class="sub">Close of '+esc(lbl)+'</div><div style="margin-top:8px;line-height:1.5">'+lead+esc(j.text)+'</div>'
-      +(j.veqt?'<div class="st">For VEQT</div><div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>':'');
+      +(j.veqt?'<div class="st">For VEQT</div>'+(Array.isArray(j.veqt)?j.veqt.map(function(v){return '<div style="margin-top:10px;line-height:1.5"><b>'+esc(v.n)+'</b> <span class="sub">'+esc(v.w)+'</span><br>'+esc(v.t)+'</div>';}).join(''):'<div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>'):'');
   }).catch(function(){});
 }
 loadRecap();setInterval(loadRecap,30*60*1000);
