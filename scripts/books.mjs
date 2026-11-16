@@ -42,7 +42,6 @@ function parse(raw) {
   const z = text.search(/\*\*\* ?END OF (THE|THIS) PROJECT GUTENBERG EBOOK/i);
   if (z >= 0) text = text.slice(0, z);
   const lines = text.split('\n');
-  { const k = lines.findIndex((l) => /third son of Fyodor/.test(l)); console.log('DEBUG-BEFORE-FIRST-BODY:\n' + lines.slice(Math.max(0, k - 45), k + 1).join('\n')); }
 
   // 1. find heading events
   const ev = [];
@@ -52,6 +51,7 @@ function parse(raw) {
     let m;
     if ((m = /^(?:PART|Part)\s+([IVX]+)\b\.?\s*$/.exec(t))) { ev.push({ i, k: 'part', v: 'Part ' + m[1].toUpperCase(), end: i + 1 }); continue; }
     if (/^(?:FROM THE AUTHOR|From the Author|From The Author)\.?$/.test(t)) { ev.push({ i, k: 'pre', v: 'From The Author', end: i + 1 }); continue; }
+    if (/^Footnotes?$/.test(t) && i > lines.length * 0.5) { ev.push({ i, k: 'foot', v: 'Footnotes', end: i + 1 }); continue; }
     if (/^(?:EPILOGUE|Epilogue)\.?$/.test(t)) { ev.push({ i, k: 'part', v: 'Epilogue', epi: true, end: i + 1 }); continue; }
     if ((m = /^(?:BOOK|Book)\s+([IVX]+)\b\.?[\s\-:—]*(.*)$/.exec(t))) {
       let title = m[2], end = i + 1;
@@ -77,6 +77,12 @@ function parse(raw) {
         started = true;
         chapters.push({ label: '·', section: 'Foreword', title: x.v, p: pb.split(/\n\s*\n/).map((q) => q.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean) });
       }
+      continue;
+    }
+    if (x.k === 'foot') {
+      const fb = lines.slice(x.end).join('\n');
+      const fp = fb.split(/\n\s*\n/).map((q) => q.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
+      if (fp.length) chapters.push({ label: '·', section: 'Notes', title: 'Footnotes', p: fp });
       continue;
     }
     if (x.k === 'part') { part = x.v; epi = !!x.epi; book = null; continue; }
