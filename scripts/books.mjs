@@ -42,6 +42,7 @@ function parse(raw) {
   const z = text.search(/\*\*\* ?END OF (THE|THIS) PROJECT GUTENBERG EBOOK/i);
   if (z >= 0) text = text.slice(0, z);
   const lines = text.split('\n');
+  { const k = lines.findIndex((l) => /third son of Fyodor/.test(l)); console.log('DEBUG-BEFORE-FIRST-BODY:\n' + lines.slice(Math.max(0, k - 45), k + 1).join('\n')); }
 
   // 1. find heading events
   const ev = [];
