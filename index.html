@@ -106,7 +106,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 #pager::-webkit-scrollbar{display:none}
-.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:6px 16px calc(32px + env(safe-area-inset-bottom));will-change:transform,opacity}
+.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:auto;padding:6px 16px calc(32px + env(safe-area-inset-bottom));will-change:transform,opacity}
 .pg .in{max-width:520px;margin:0 auto}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
@@ -291,7 +291,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 103</div>
+  <div class="sub" style="margin-top:12px">build 104</div>
 </section>
 </div></div>
 </div>
