@@ -294,7 +294,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 107</div>
+  <div class="sub" style="margin-top:12px">build 108</div>
 </section>
 </div></div>
 </div>
@@ -573,18 +573,34 @@ function spark(c,pct){
 }
 function newsHtml(a){return (a||[]).slice(0,5).map(function(n){return '<a href="'+n.l+'" target="_blank" rel="noopener" style="display:block;color:inherit;text-decoration:none;padding:10px 0;border-top:1px solid var(--line);font:500 14px/1.35 \'Space Grotesk\',system-ui,sans-serif">'+n.t.replace(/</g,'&lt;')+'<div class="sub" style="margin-top:3px">'+(n.p||'')+'</div></a>';}).join('');}
 function mkConv(d){if(!d||!d.p||!d.pc)return null;return {p:d.p,pc:d.pc,pct:(d.p-d.pc)/d.pc*100,c:d.c||[]};}
+function mkLive(k){
+  var px=(S.proxy||'').replace(/\/+$/,'');
+  if(!px)return Promise.resolve(null);
+  var ctl=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort();},6000);
+  return fetch(px+'/chart?s='+encodeURIComponent(k)+'&r=1d',ctl?{signal:ctl.signal}:{}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    clearTimeout(tm);
+    var r=j.chart.result[0],m=r.meta,c=(r.indicators.quote[0].close||[]).filter(function(v){return v!=null;});
+    if(!m.regularMarketPrice||!m.chartPreviousClose)throw 0;
+    return {p:m.regularMarketPrice,pc:m.chartPreviousClose,c:c};
+  }).catch(function(){clearTimeout(tm);return null;});
+}
 function mkData(){
-  return fetch('markets.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
-    return {t:j.t,vr:j.vr,news:j.news,gnews:j.gnews,r:['VEQT.TO','ES=F','NQ=F','YM=F'].map(function(k){return mkConv(j[k]);})};
-  }).catch(function(){
-    return Promise.all(['VEQT.TO','ES=F','NQ=F','YM=F'].map(function(k){return mkFetch(k).then(function(d){return d;},function(){return null;});})).then(function(r){return {t:null,r:r};});
+  var K=['VEQT.TO','ES=F','NQ=F','YM=F'];
+  var file=fetch('markets.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).catch(function(){return null;});
+  return Promise.all([file,Promise.all(K.map(mkLive))]).then(function(a){
+    var j=a[0]||{},lv=a[1],got=lv.some(function(x){return x;});
+    if(!a[0]&&!got){
+      return Promise.all(K.map(function(k){return mkFetch(k).then(function(d){return d;},function(){return null;});})).then(function(r){return {t:null,r:r};});
+    }
+    return {t:got?new Date().toISOString():j.t,vr:j.vr,news:j.news,gnews:j.gnews,r:K.map(function(k,i){return mkConv(lv[i]||j[k]);})};
   });
 }
-var mkV=null,mkVR={};
+var mkV=null,mkVR={},mkVRL={},mkVRT={};
 function drawVeqt(){
   var v=mkV,rg=S.rngM||'1d';
   if(!v){$('mkVeqt').innerHTML='<div class="sub">VEQT unavailable</div>';return;}
-  var c=rg==='1d'?v.c:(mkVR[rg]||[]),pct=rg==='1d'?v.pct:rngPct(c,v.pct);
+  var c=rg==='1d'?v.c:(mkVRL[rg]||mkVR[rg]||[]),pct=rg==='1d'?v.pct:rngPct(c,v.pct);
+  if(rg!=='1d'&&!mkVRL[rg]&&(S.proxy||'')&&!mkVRT[rg]){mkVRT[rg]=1;stkChart('VEQT.TO',rg).then(function(j){var q=j.chart.result[0].indicators.quote[0].close||[];q=q.filter(function(x){return x!=null;});if(q.length>1){mkVRL[rg]=q;if((S.rngM||'1d')===rg)drawVeqt();}}).catch(function(){});}
   $('mkVeqt').innerHTML='<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="sub">VEQT</span><span style="font:400 28px NDot,monospace">$'+v.p.toFixed(2)+' '+pctTxt(pct)+'</span></div>'+rngBar(rg)+spark(c,pct);
 }
 $('mkVeqt').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){S.rngM=r;save();drawVeqt();}});
@@ -596,7 +612,7 @@ function loadMarkets(){
     $('mkNews').innerHTML=nw?'<div class="sub" style="margin-bottom:6px">Market news</div>'+nw:'';
     $('gNews').innerHTML=newsHtml(o.gnews)||'<div class="sub">News unavailable.</div>';
     if(!r[0]&&!r[1]&&!r[2]&&!r[3]){$('mkVeqt').innerHTML='<div class="sub">Live numbers did not load.</div>';return;}
-    mkV=r[0];mkVR=o.vr||{};drawVeqt();
+    mkV=r[0];mkVR=o.vr||{};mkVRL={};mkVRT={};try{['1d','5d','1mo','1y','5y'].forEach(function(x){delete stkC['VEQT.TO|'+x];});}catch(e){}drawVeqt();
     var h='',sum=0,n=0;
     for(var i=1;i<4;i++){var d=r[i];h+='<div style="display:flex;justify-content:space-between;margin-top:10px"><span class="sub">'+syms[i][1]+' futures</span><span style="font:400 22px NDot,monospace">'+(d?pctTxt(d.pct):'n/a')+'</span></div>';if(d){sum+=d.pct;n++;}}
     $('mkFut').innerHTML=h;
