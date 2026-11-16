@@ -177,14 +177,18 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #rdCard[data-t="night"]{--card:#15110d;--card2:#221c16;--tx:#cdbb98;--mu:#8c7d63;--line:#3a3128;--bg:#15110d}
 #rdCard{transition:background-color .35s ease,color .35s ease}
 
-#ptr{position:fixed;left:50%;top:0;z-index:30;transform:translate(-50%,-60px);padding:9px 16px;border-radius:999px;background:var(--tx);color:var(--bg);font:700 11px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;pointer-events:none;opacity:0;white-space:nowrap;will-change:transform,opacity}
+#ptr{position:fixed;left:50%;top:0;z-index:30;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:var(--card2,#222);box-shadow:0 2px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;transform:translate3d(0,-60px,0);pointer-events:none;opacity:0;will-change:transform,opacity}
+#ptr svg{width:22px;height:22px;display:block;will-change:transform}
+#ptr circle{fill:none;stroke:var(--tx);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:38 20;transform-origin:center}
+#ptr.spin svg{animation:ptrspin .7s linear infinite}
+@keyframes ptrspin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <h1 id="greet" class="hide">Good morning</h1>
 <div id="clock" class="hide">--:--</div>
 
-<div id="ptr">Refresh</div>
+<div id="ptr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
 <div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Reading</div><div class="tab" data-i="2">Markets</div><div class="tab" data-i="3">Notes</div></nav></div></div></div>
 <div id="pager">
 <div class="pg"><div class="in">
@@ -294,7 +298,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 108</div>
+  <div class="sub" style="margin-top:12px">build 109</div>
 </section>
 </div></div>
 </div>
@@ -857,10 +861,9 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
 (function(){
   var pager=document.getElementById('pager'),ind=document.getElementById('ptr');
   if(!pager||!ind)return;
-  var y0=0,x0=0,g=null,dy=0,on=false,raf=0,MAX=150,TH=110;
-  ind.textContent='Refresh';
-  function pos(d,o){ind.style.transform='translate3d(-50%,'+(d-60)+'px,0)';ind.style.opacity=o;}
-  function frame(){raf=0;var d=MAX*(1-Math.exp(-dy/MAX));pos(d,Math.min(1,dy/50));}
+  var ic=ind.firstChild,y0=0,x0=0,g=null,dy=0,on=false,raf=0,MAX=150,TH=110;
+  function pos(d,o,rot){ind.style.transform='translate3d(0,'+(d-50)+'px,0)';ind.style.opacity=o;if(rot!=null)ic.style.transform='rotate('+rot+'deg)';}
+  function frame(){raf=0;var d=MAX*(1-Math.exp(-dy/MAX));pos(d,Math.min(1,dy/40),dy*3);}
   function reset(){ind.style.transition='transform .38s cubic-bezier(.2,.8,.2,1),opacity .3s ease';pos(0,0);on=false;g=null;dy=0;}
   pager.addEventListener('touchstart',function(e){
     if(e.touches.length!==1){g=null;return;}
@@ -879,7 +882,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   },{passive:true});
   pager.addEventListener('touchend',function(){
     if(!on){g=null;return;}
-    if(dy>=TH){ind.style.transition='transform .25s cubic-bezier(.2,.8,.2,1)';pos(MAX*(1-Math.exp(-TH/MAX)),1);g=null;on=false;setTimeout(function(){location.reload();},220);return;}
+    if(dy>=TH){ind.style.transition='transform .25s cubic-bezier(.2,.8,.2,1)';pos(MAX*(1-Math.exp(-TH/MAX)),1,null);ic.style.transform='';ind.classList.add('spin');g=null;on=false;setTimeout(function(){location.reload();},450);return;}
     reset();
   },{passive:true});
   pager.addEventListener('touchcancel',function(){if(on)reset();g=null;},{passive:true});
