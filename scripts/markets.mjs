@@ -50,8 +50,7 @@ async function pull(feeds,per,max,bad){
 }
 out.news=await pull(feeds,4,5,/\$\d|\b(he|she|his|her)\b.*\$|^\d+ |best .* to buy|should you buy|\?|^['"\u2018\u201c]/i);
 out.gnews=await pull([
- ['CBC','https://www.cbc.ca/webfeed/rss/rss-topstories'],
- ['BBC','https://feeds.bbci.co.uk/news/world/rss.xml']
-],4,5,/\?|^\d+ |live:|watch:|quiz/i);
+ ['CBC','https://www.cbc.ca/webfeed/rss/rss-topstories']
+],6,5,/\?|^\d+ |live:|watch:|quiz/i);
 if(Object.keys(out).length>1)fs.writeFileSync('markets.json',JSON.stringify(out));
 else{console.error('no data');process.exit(1);}
