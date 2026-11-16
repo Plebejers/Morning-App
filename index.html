@@ -294,7 +294,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 106</div>
+  <div class="sub" style="margin-top:12px">build 107</div>
 </section>
 </div></div>
 </div>
@@ -887,6 +887,10 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     });
   }
   pager.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(paint);}},{passive:true});
+  var PK='glance-page',pst;
+  function curI(){return Math.round(pager.scrollLeft/(pager.clientWidth||1));}
+  pager.addEventListener('scroll',function(){clearTimeout(pst);pst=setTimeout(function(){try{sessionStorage.setItem(PK,String(curI()));}catch(e){}},150);},{passive:true});
+  try{var si=parseInt(sessionStorage.getItem(PK),10);if(si>0&&si<pgs.length){pager.style.scrollSnapType='none';pager.scrollLeft=si*pager.clientWidth;requestAnimationFrame(function(){pager.style.scrollSnapType='';paint();});}}catch(e){}
   tabs.forEach(function(t){t.addEventListener('click',function(){
     pager.scrollTo({left:(+t.getAttribute('data-i'))*pager.clientWidth,behavior:calm?'auto':'smooth'});
   });});
