@@ -84,7 +84,7 @@ function parse(raw) {
     let body = lines.slice(x.end, nextI).join('\n');
     // text between a Part/Book heading and its first chapter (e.g. a foreword) belongs to that chapter
     const prev = ev[e - 1];
-    if (started && prev && prev.k !== 'chap') {
+    if (prev && prev.k !== 'chap') {
       const gap = lines.slice(prev.end, x.i).join('\n');
       if (gap.trim().length > 200) body = gap + '\n\n' + body;
     }
