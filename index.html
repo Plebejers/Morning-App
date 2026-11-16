@@ -149,6 +149,10 @@ input,textarea{-webkit-user-select:text;user-select:text}
   <div id="mkNews" style="margin-top:14px"></div>
 </section>
 
+<section class="card">
+  <h2>Recap</h2>
+  <div id="rcOut"><div class="sub">No recap yet.</div></div>
+</section>
 
 <section class="card">
   <h2>Stocks</h2>
@@ -189,7 +193,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 91</div>
+  <div class="sub" style="margin-top:12px">build 92</div>
 </section>
 
 <script>
@@ -496,6 +500,15 @@ function loadMarkets(){
     if(n){var a=sum/n;$('mkSum').textContent='US futures: '+(Math.abs(a)<0.15?'flat':a>0?'pointing higher':'pointing lower')+' ('+pctTxt(a)+' avg).'+up;}
   });
 }
+function loadRecap(){
+  fetch('recap.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    var d=new Date(j.d+'T12:00:00'),lbl=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+    $('rcOut').innerHTML='<div class="sub">Close of '+esc(lbl)+'</div><div style="margin-top:8px;line-height:1.5">'+esc(j.text)+'</div>'
+      +(j.mood?'<div class="st">Sentiment</div><div style="margin-top:8px;line-height:1.5">'+esc(j.mood)+'</div>':'')
+      +(j.veqt?'<div class="st">For VEQT</div><div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>':'');
+  }).catch(function(){});
+}
+loadRecap();setInterval(loadRecap,30*60*1000);
 loadMarkets();setInterval(loadMarkets,10*60*1000);
 
 
