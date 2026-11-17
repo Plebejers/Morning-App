@@ -103,42 +103,16 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #tabwrap .tpad{padding:calc(10px + env(safe-area-inset-top)) 0 8px}
 #tabwrap .tpad>#tabs{position:relative}
 #tabs{position:relative;display:flex;margin:0 auto;width:min(calc(100% - 16px),504px);background:var(--card);border-radius:999px;padding:4px;flex:0 0 auto}
-#tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .25s ease}
+#tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
 #tabs .tab.on{color:var(--bg)}
-#pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);background:var(--tx);border-radius:999px;will-change:transform}
-#pager{flex:1 1 0;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
-#pager::-webkit-scrollbar{display:none}
-.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));contain:layout paint style;backface-visibility:hidden}
+#pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);background:var(--tx);border-radius:999px;will-change:transform}
+#pager{flex:1 1 0;min-height:0;position:relative;overflow:hidden;perspective:900px;perspective-origin:50% 38%;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;will-change:transform;visibility:hidden;contain:layout style;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));-webkit-user-select:auto;user-select:auto}
+.pg::-webkit-scrollbar{display:none;width:0;height:0}
+.pg.vis{visibility:visible}
 .pg .in{max-width:560px;margin:0 auto}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
-@supports (animation-timeline:scroll()){
-  body{timeline-scope:--pg}
-  #pager{scroll-timeline:--pg x}
-  @keyframes pillgo{from{transform:translateX(0)}to{transform:translateX(200%)}}
-  #pill{animation:pillgo linear both;animation-timeline:--pg}
-  @keyframes t0{0%{color:var(--bg)}50%,100%{color:var(--mu)}}
-  @keyframes t1{0%,100%{color:var(--mu)}50%{color:var(--bg)}}
-  @keyframes t2{0%,50%{color:var(--mu)}100%{color:var(--bg)}}
-  #tabs .tab{transition:none;animation-timing-function:linear;animation-fill-mode:both;animation-timeline:--pg}
-  #tabs .tab[data-i="0"]{animation-name:t0}
-  #tabs .tab[data-i="1"]{animation-name:t1}
-  #tabs .tab[data-i="2"]{animation-name:t2}
-  #tabs .tab.on{color:inherit}
-  @keyframes pgfx{0%,100%{opacity:.5}50%{opacity:1}}
-
-}
-
-.pg{position:relative}
-#pill{width:calc((100% - 8px)/4)}
-@keyframes pillgo{from{transform:translateX(0)}to{transform:translateX(300%)}}
-@supports (animation-timeline:scroll()){
-  @keyframes t0{0%{color:var(--bg)}33.333%,100%{color:var(--mu)}}
-  @keyframes t1{0%,66.667%,100%{color:var(--mu)}33.333%{color:var(--bg)}}
-  @keyframes t2{0%,33.333%,100%{color:var(--mu)}66.667%{color:var(--bg)}}
-  @keyframes t3{0%,66.667%{color:var(--mu)}100%{color:var(--bg)}}
-  #tabs .tab[data-i="3"]{animation-name:t3}
-}
 #rdBar{display:flex;gap:8px}
 #rdBar button{flex:1;padding:11px 8px;font-size:12px;margin:0}
 #rdBar button.on{background:var(--tx);color:var(--bg)}
@@ -210,17 +184,6 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
 .gf{display:flex;align-items:center;justify-content:center;gap:12px;margin:22px 0 0;color:var(--mu);opacity:.75}
 .gf .gi{width:22px;height:22px;display:block}
 .gf span{font:400 22px/1 'NDot','Doto','Space Mono',monospace;letter-spacing:.04em}
-@supports (animation-timeline:scroll()){
-  #tabs .tab,#tabs .tab[data-i]{animation:none!important;transition:color .18s ease!important}
-  #tabs .tab{color:var(--mu)}
-  #tabs .tab.on{color:var(--bg)}
-}
-.pg{scrollbar-width:none}
-.pg::-webkit-scrollbar{display:none;width:0;height:0}
-#pager{display:block;position:relative;overflow:hidden;scroll-snap-type:none;perspective:900px;perspective-origin:50% 38%;touch-action:pan-y;-webkit-user-select:none;user-select:none}
-.pg{position:absolute;inset:0;width:auto;flex:none;scroll-snap-align:none;scroll-snap-stop:normal;touch-action:pan-y;will-change:transform;visibility:hidden;contain:layout style;-webkit-user-select:auto;user-select:auto}
-.pg.vis{visibility:visible}
-#pill{animation:none!important}
 </style>
 </head>
 <body>
@@ -339,7 +302,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 126</div>
+  <div class="sub" style="margin-top:12px">build 127</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
