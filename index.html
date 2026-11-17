@@ -299,7 +299,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 110</div>
+  <div class="sub" style="margin-top:12px">build 111</div>
 </section>
 </div></div>
 </div>
@@ -923,14 +923,15 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     g.addEventListener('scroll',function(){
       if(pgs[Math.round(pager.scrollLeft/(pager.clientWidth||1))]!==g){lastY.set(g,g.scrollTop);return;}
       var y=g.scrollTop,d=y-lastY.get(g);
+      if(y<=12){wrap.classList.remove('off');lastY.set(g,y);return;}
       if(Math.abs(d)<6)return;
       lastY.set(g,y);
-      wrap.classList.toggle('off',d>0&&y>60);
+      if(d>0&&y>60)wrap.classList.add('off');
     },{passive:true});
   });
   pager.addEventListener('scroll',function(){
     var cur=pgs[Math.round(pager.scrollLeft/(pager.clientWidth||1))];
-    if(cur&&cur.scrollTop<=60)wrap.classList.remove('off');
+    wrap.classList.remove('off');
   },{passive:true});
   window.addEventListener('resize',paint);
   paint();
