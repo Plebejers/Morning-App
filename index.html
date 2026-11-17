@@ -137,12 +137,13 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #rdHead{margin-top:22px}
 .rdn{font:400 64px/1 'NDot','Doto',monospace;color:var(--tx)}
 .rdt{font:400 30px/1.15 'NDot','Doto',monospace;margin-top:8px;color:var(--tx);overflow-wrap:anywhere}
-#rdText{color:var(--tx);position:relative;margin-top:20px;font-family:var(--rf,Literata,Georgia,'Times New Roman',serif);font-size:var(--rsz,19px);line-height:1.7;-webkit-hyphens:auto;hyphens:auto;letter-spacing:.005em}
+#rdText{color:var(--tx);position:relative;margin-top:20px;font-family:var(--rf,Literata,Georgia,'Times New Roman',serif);font-size:var(--rsz,19px);line-height:1.7;-webkit-hyphens:manual;hyphens:manual;letter-spacing:.005em}
 #rdCard[data-f="sans"] #rdText{font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.65}
 #rdText p{margin:0 0 1em}
 #rdText p.br{text-align:center;color:var(--mu);letter-spacing:.5em;margin:1.4em 0}
 #rdText p.fn{font-size:.8em;color:var(--mu);line-height:1.5}
 #rdText em{font-style:italic}
+#rdText .nb{white-space:nowrap}
 #rdNav{margin-top:26px}
 #rdNav .row{margin-top:10px}
 #rdNav button{margin:0}
@@ -302,7 +303,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 130</div>
+  <div class="sub" style="margin-top:12px">build 131</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -758,6 +759,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   function fmt(p){
     if(/^[\*\s·]+$/.test(p))return '<p class="br">* * *</p>';
     var h=esc(p).replace(/_([^_\n]+)_/g,'<em>$1</em>');
+    h=h.replace(/([A-Za-z\u00C0-\u024F]+(?:-[A-Za-z\u00C0-\u024F]+)+)/g,'<span class="nb">$1</span>');
     return '<p'+(/^\[\d+\]/.test(p)?' class="fn"':'')+'>'+h+'</p>';
   }
   function yOf(el){var y=0;while(el&&el!==pg){y+=el.offsetTop;el=el.offsetParent;}return y;}
