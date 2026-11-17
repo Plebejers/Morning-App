@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#000000" id="tcm">
-<script>try{var __t=localStorage.getItem("glance-theme");if(__t)document.documentElement.setAttribute("data-theme",__t);}catch(e){}</script>
+<script>try{var __t=localStorage.getItem("glance-theme");if(__t)document.documentElement.setAttribute("data-theme",__t);}catch(e){}document.documentElement.classList.add("boot");setTimeout(function(){document.documentElement.classList.remove("boot");},2500);</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -185,6 +185,11 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
 .gf{display:flex;align-items:center;justify-content:center;gap:12px;margin:22px 0 0;color:var(--mu);opacity:.75}
 .gf .gi{width:22px;height:22px;display:block}
 .gf span{font:400 22px/1 'NDot','Doto','Space Mono',monospace;letter-spacing:.04em}
+html.boot body{opacity:0}
+html:not(.boot) body{animation:bootin .32s ease}
+@keyframes bootin{from{opacity:0}to{opacity:1}}
+.card{contain:layout style}
+@media (prefers-reduced-motion:reduce){html:not(.boot) body{animation:none}}
 </style>
 </head>
 <body>
@@ -303,7 +308,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 131</div>
+  <div class="sub" style="margin-top:12px">build 132</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -929,7 +934,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     }
     pill.style.transform='translateX('+(pos*100).toFixed(2)+'%)';
     var ci=idx();
-    if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});}
+    if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});save();}
   }
   function save(){try{sessionStorage.setItem(PK,String(idx()));}catch(e){}}
   function ease(t){return 1-Math.pow(1-t,4);}
@@ -987,8 +992,15 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   });
   try{var si=parseInt(sessionStorage.getItem(PK),10);if(si>0&&si<N)pos=si;}catch(e){}
   window.addEventListener('resize',render);
+  window.addEventListener('pagehide',save);
   render();
   window.__pager={goto:goto,get pos(){return pos;}};
+})();
+(function(){
+  var done=false;
+  function go(){if(done)return;done=true;requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.remove('boot');});});}
+  if(document.fonts&&document.fonts.ready)Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,700);})]).then(go);else go();
+  setTimeout(go,1200);
 })();
 </script>
 </body>

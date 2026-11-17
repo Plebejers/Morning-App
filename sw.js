@@ -1,7 +1,15 @@
-var C='commute-v4',F=['./','index.html','manifest.json','icon.svg'];
+var C='commute-v5',F=['./','index.html','manifest.json','icon.svg'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(F);}));self.skipWaiting();});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==C;}).map(function(n){return caches.delete(n);}));}).then(function(){return self.clients.claim();}));});
 self.addEventListener('fetch',function(e){
-  if(e.request.method!=='GET'||e.request.url.indexOf(self.location.origin)!==0)return;
-  e.respondWith(fetch(e.request,{cache:'no-cache'}).then(function(r){var cp=r.clone();caches.open(C).then(function(c){c.put(e.request,cp);});return r;}).catch(function(){return caches.match(e.request);}));
+  var rq=e.request;
+  if(rq.method!=='GET'||rq.url.indexOf(self.location.origin)!==0)return;
+  var u=new URL(rq.url),key=new Request(u.origin+u.pathname);
+  var shell=rq.mode==='navigate'||/\/(index\.html)?$/.test(u.pathname);
+  var net=fetch(rq,{cache:'no-cache'}).then(function(r){if(r.ok){var cp=r.clone();caches.open(C).then(function(c){c.put(key,cp);});}return r;});
+  function fb(){return caches.match(key).then(function(m){return m||Response.error();});}
+  e.waitUntil(net.catch(function(){}));
+  if(shell){
+    e.respondWith(Promise.race([net.catch(fb),new Promise(function(res){setTimeout(function(){res(caches.match(key).then(function(m){return m||net;}));},1500);})]));
+  }else e.respondWith(net.catch(fb));
 });
