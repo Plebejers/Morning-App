@@ -308,7 +308,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 132</div>
+  <div class="sub" style="margin-top:12px">build 133</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -957,7 +957,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     if(!down||e.pointerId!==pid)return;
     var dx=e.clientX-sx,dy=e.clientY-sy;
     if(lock===null){
-      if(Math.abs(dx)<8&&Math.abs(dy)<8)return;
+      if(Math.abs(dx)<6&&Math.abs(dy)<6)return;
       lock=Math.abs(dx)>Math.abs(dy)*1.1?'x':'y';
       if(lock==='x'){try{pager.setPointerCapture(pid);}catch(_){}showBar();}
     }
@@ -971,8 +971,8 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     if(lock!=='x'){lock=null;return;}
     lock=null;cancelAnimationFrame(rq);rq=0;
     var v=0;if(smp.length>1){var f=smp[0],l=smp[smp.length-1],dt=l.t-f.t;if(dt>0)v=-(l.x-f.x)/dt/(pager.clientWidth||1);}
-    var base=Math.round(sp),t=cancel?Math.round(pos):Math.round(pos+v*240);
-    if(!cancel&&t===base&&Math.abs(pos-sp)>0.25)t=base+(pos>sp?1:-1);
+    var base=Math.round(sp),t=cancel?Math.round(pos):Math.round(pos+v*340);
+    if(!cancel&&t===base&&(Math.abs(pos-sp)>0.1||Math.abs(v)>0.0004))t=base+((pos>sp||v>0.0004)?1:-1);
     t=Math.max(base-1,Math.min(base+1,t));
     goto(t);
   }
