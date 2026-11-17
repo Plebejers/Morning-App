@@ -108,7 +108,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 #pager::-webkit-scrollbar{display:none}
-.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));will-change:transform,opacity}
+.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));contain:layout paint style;backface-visibility:hidden}
 .pg .in{max-width:560px;margin:0 auto}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
@@ -125,7 +125,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   #tabs .tab[data-i="1"]{animation-name:t1}
   #tabs .tab[data-i="2"]{animation-name:t2}
   #tabs .tab.on{color:inherit}
-  @keyframes pgfx{0%,100%{opacity:.45;transform:scale(.96)}50%{opacity:1;transform:scale(1)}}
+  @keyframes pgfx{0%,100%{opacity:.5}50%{opacity:1}}
   .pg{animation:pgfx linear both;animation-timeline:view(inline);animation-range:cover 0% cover 100%}
 }
 
@@ -207,6 +207,9 @@ body,.card,#tabs{transition:background-color .3s ease,color .3s ease}
 :root[data-theme="blue"]{--bgt:#0f2449}
 html{background:var(--bg)}
 body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);background-repeat:no-repeat;background-size:100% 100%}
+.gf{display:flex;align-items:center;justify-content:center;gap:12px;margin:22px 0 0;color:var(--mu);opacity:.75}
+.gf .gi{width:22px;height:22px;display:block}
+.gf span{font:400 22px/1 'NDot','Doto','Space Mono',monospace;letter-spacing:.04em}
 </style>
 </head>
 <body>
@@ -258,7 +261,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
     <button class="ghost sm" id="resetBtn">Reset today</button>
   </div>
 </section>
-</div></div>
+<div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 <div class="pg"><div class="in">
 <section class="card" id="rdCard" data-t="app" data-f="serif">
   <h2>Reading</h2>
@@ -268,7 +271,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   <div id="rdText"></div>
   <div id="rdNav"></div>
 </section>
-</div></div>
+<div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 <div class="pg"><div class="in">
 <section class="card">
   <h2>Markets</h2>
@@ -293,7 +296,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   <h2>News</h2>
   <div id="gNews"></div>
 </section>
-</div></div>
+<div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 <div class="pg"><div class="in">
 <section class="card">
   <h2>Notes</h2>
@@ -325,9 +328,9 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 118</div>
+  <div class="sub" style="margin-top:12px">build 119</div>
 </section>
-</div></div>
+<div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
 
 <script>
