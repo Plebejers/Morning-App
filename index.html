@@ -215,6 +215,15 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   #tabs .tab{color:var(--mu)}
   #tabs .tab.on{color:var(--bg)}
 }
+.pg{scrollbar-width:none}
+.pg::-webkit-scrollbar{display:none;width:0;height:0}
+@keyframes cardin{from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
+.pg.arr .card{animation:cardin .28s cubic-bezier(.2,.8,.2,1) backwards}
+.pg.arr .card:nth-child(2){animation-delay:.05s}
+.pg.arr .card:nth-child(3){animation-delay:.1s}
+.pg.arr .card:nth-child(4){animation-delay:.15s}
+.pg.arr .card:nth-child(n+5){animation-delay:.2s}
+@media (prefers-reduced-motion:reduce){.pg.arr .card{animation:none}}
 </style>
 </head>
 <body>
@@ -333,7 +342,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 121</div>
+  <div class="sub" style="margin-top:12px">build 122</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -983,6 +992,17 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});}
     if(wrap.classList.contains('off'))wrap.classList.remove('off');
   },{passive:true});
+  var arrI=-1,arrT;
+  function landed(){
+    var i=Math.round(pager.scrollLeft/(pager.clientWidth||1));
+    if(i===arrI||i<0||i>=pgs.length)return;
+    arrI=i;var g=pgs[i];
+    g.classList.remove('arr');void g.offsetWidth;g.classList.add('arr');
+    clearTimeout(arrT);arrT=setTimeout(function(){g.classList.remove('arr');},700);
+  }
+  arrI=Math.round(pager.scrollLeft/(pager.clientWidth||1));
+  if('onscrollend' in window)pager.addEventListener('scrollend',landed);
+  else{var st2;pager.addEventListener('scroll',function(){clearTimeout(st2);st2=setTimeout(landed,140);},{passive:true});}
   window.addEventListener('resize',paint);
   paint();
 })();
