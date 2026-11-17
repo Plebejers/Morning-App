@@ -210,6 +210,11 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
 .gf{display:flex;align-items:center;justify-content:center;gap:12px;margin:22px 0 0;color:var(--mu);opacity:.75}
 .gf .gi{width:22px;height:22px;display:block}
 .gf span{font:400 22px/1 'NDot','Doto','Space Mono',monospace;letter-spacing:.04em}
+@supports (animation-timeline:scroll()){
+  #tabs .tab,#tabs .tab[data-i]{animation:none!important;transition:color .18s ease!important}
+  #tabs .tab{color:var(--mu)}
+  #tabs .tab.on{color:var(--bg)}
+}
 </style>
 </head>
 <body>
@@ -328,7 +333,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 119</div>
+  <div class="sub" style="margin-top:12px">build 120</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -951,7 +956,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     });
   }
   pager.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(paint);}},{passive:true});
-  var PK='glance-page',pst;
+  var PK='glance-page',pst,lastCi=-1;
   function curI(){return Math.round(pager.scrollLeft/(pager.clientWidth||1));}
   pager.addEventListener('scroll',function(){clearTimeout(pst);pst=setTimeout(function(){try{sessionStorage.setItem(PK,String(curI()));}catch(e){}},150);},{passive:true});
   try{var si=parseInt(sessionStorage.getItem(PK),10);if(si>0&&si<pgs.length){pager.style.scrollSnapType='none';pager.scrollLeft=si*pager.clientWidth;requestAnimationFrame(function(){pager.style.scrollSnapType='';paint();});}}catch(e){}
@@ -974,8 +979,9 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     },{passive:true});
   });
   pager.addEventListener('scroll',function(){
-    var cur=pgs[Math.round(pager.scrollLeft/(pager.clientWidth||1))];
-    wrap.classList.remove('off');
+    var ci=Math.round(pager.scrollLeft/(pager.clientWidth||1));
+    if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});}
+    if(wrap.classList.contains('off'))wrap.classList.remove('off');
   },{passive:true});
   window.addEventListener('resize',paint);
   paint();
