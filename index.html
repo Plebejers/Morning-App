@@ -102,7 +102,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #tabwrap .tin{min-height:0}
 #tabwrap .tpad{padding:calc(10px + env(safe-area-inset-top)) 0 8px}
 #tabwrap .tpad>#tabs{position:relative}
-#tabs{position:relative;display:flex;margin:0 auto;width:min(calc(100% - 16px),504px);background:var(--card);border-radius:999px;padding:4px;flex:0 0 auto}
+#tabs{position:relative;display:flex;margin:0 auto;width:min(calc(100% - 16px),504px);background:var(--card);border:1px solid color-mix(in srgb,var(--tx) 9%,transparent);border-radius:999px;padding:4px;flex:0 0 auto}
 #tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
 #tabs .tab.on{color:var(--bg)}
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);background:var(--tx);border-radius:999px;will-change:transform}
@@ -153,7 +153,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #rdCard[data-t="night"]{--card:#15110d;--card2:#221c16;--tx:#cdbb98;--mu:#8c7d63;--line:#3a3128;--bg:#15110d}
 #rdCard{transition:background-color .35s ease,color .35s ease}
 
-#ptr{position:fixed;left:50%;top:0;z-index:30;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:var(--card2,#222);box-shadow:0 2px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;transform:translate3d(0,-60px,0);pointer-events:none;opacity:0;will-change:transform,opacity}
+#ptr{position:fixed;left:50%;top:0;z-index:30;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:var(--card);border:1px solid color-mix(in srgb,var(--tx) 14%,transparent);box-shadow:0 2px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;transform:translate3d(0,-60px,0);pointer-events:none;opacity:0;will-change:transform,opacity}
 #ptr svg{width:22px;height:22px;display:block;will-change:transform}
 #ptr circle{fill:none;stroke:var(--tx);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:38 20;transform-origin:center}
 #ptr.spin svg{animation:ptrspin .7s linear infinite}
@@ -302,7 +302,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 128</div>
+  <div class="sub" style="margin-top:12px">build 129</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
