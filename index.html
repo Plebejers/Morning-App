@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#000000" id="tcm">
+<script>try{var __t=localStorage.getItem("glance-theme");if(__t)document.documentElement.setAttribute("data-theme",__t);}catch(e){}</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -183,6 +184,18 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #ptr circle{fill:none;stroke:var(--tx);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:38 20;transform-origin:center}
 #ptr.spin svg{animation:ptrspin .7s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
+
+:root[data-theme="light"]{--bg:#f1f1f1;--card:#fff;--card2:#f1f1f1;--line:#dcdcdc;--tx:#0a0a0a;--mu:#6e6e6e;--dim:#dcdcdc;color-scheme:light}
+:root[data-theme="dark"]{--bg:#000;--card:#111;--card2:#1a1a1a;--line:#2a2a2a;--tx:#fff;--mu:#8c8c8c;--dim:#2a2a2a;color-scheme:dark}
+:root[data-theme="pink"]{--bg:#f6e2e9;--card:#fdf2f5;--card2:#f2d6e0;--line:#e4bccb;--tx:#3a1522;--mu:#94606f;--dim:#e4bccb;color-scheme:light}
+:root[data-theme="maroon"]{--bg:#26080f;--card:#380f19;--card2:#481824;--line:#5e2633;--tx:#f7e6e9;--mu:#bb8d96;--dim:#5e2633;color-scheme:dark}
+:root[data-theme="green"]{--bg:#08190f;--card:#0f2619;--card2:#173525;--line:#24493a;--tx:#e5f3ea;--mu:#86ac98;--dim:#24493a;color-scheme:dark}
+:root[data-theme="blue"]{--bg:#07142b;--card:#0e1f3f;--card2:#162c54;--line:#253f6b;--tx:#e7effd;--mu:#8ea5cc;--dim:#253f6b;color-scheme:dark}
+body,.card,#tabs{transition:background-color .3s ease,color .3s ease}
+#thm{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+#thm .th{display:inline-flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;border-radius:999px;border:1.5px solid var(--line);font:700 12px 'Space Mono',monospace;cursor:pointer;color:var(--tx);-webkit-tap-highlight-color:transparent}
+#thm .th i{width:18px;height:18px;border-radius:50%;display:block;border:1px solid rgba(128,128,128,.4)}
+#thm .th.on{border-color:var(--tx)}
 </style>
 </head>
 <body>
@@ -278,6 +291,8 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 
 <section class="card" id="setupCard">
   <h2>Setup</h2>
+  <div class="sub" style="margin-bottom:8px">Theme</div>
+  <div id="thm"><div class="th" data-t=""><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>Auto</div><div class="th" data-t="light"><i style="background:#fff"></i>White</div><div class="th" data-t="dark"><i style="background:#000"></i>Black</div><div class="th" data-t="pink"><i style="background:#f6c9d8"></i>Pink</div><div class="th" data-t="maroon"><i style="background:#6b1428"></i>Maroon</div><div class="th" data-t="green"><i style="background:#14513a"></i>Green</div><div class="th" data-t="blue"><i style="background:#1d4fb8"></i>Blue</div></div>
   <div class="row">
     <label>Wake up<input type="time" id="wake"></label>
   </div>
@@ -299,7 +314,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 112</div>
+  <div class="sub" style="margin-top:12px">build 113</div>
 </section>
 </div></div>
 </div>
@@ -859,6 +874,21 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   }).catch(function(){head.innerHTML='<div class="sub">The library could not be loaded. Open the app online once to download it.</div>';});
 })();
 
+(function(){
+  var th=document.getElementById('thm'),tc=document.getElementById('tcm');
+  if(!th)return;
+  var CL={light:'#f1f1f1',dark:'#000000',pink:'#f6e2e9',maroon:'#26080f',green:'#08190f',blue:'#07142b'};
+  function cur(){var t='';try{t=localStorage.getItem('glance-theme')||'';}catch(e){}return t;}
+  function apply(t){
+    var r=document.documentElement;
+    if(t)r.setAttribute('data-theme',t);else r.removeAttribute('data-theme');
+    try{if(t)localStorage.setItem('glance-theme',t);else localStorage.removeItem('glance-theme');}catch(e){}
+    [].forEach.call(th.children,function(c){c.classList.toggle('on',c.getAttribute('data-t')===t);});
+    if(tc)tc.setAttribute('content',CL[t]||(window.matchMedia&&matchMedia('(prefers-color-scheme:light)').matches?'#f1f1f1':'#000000'));
+  }
+  th.addEventListener('click',function(e){var c=e.target.closest('.th');if(c)apply(c.getAttribute('data-t'));});
+  apply(cur());
+})();
 (function(){
   var pager=document.getElementById('pager'),ind=document.getElementById('ptr');
   if(!pager||!ind)return;
