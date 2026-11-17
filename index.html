@@ -96,17 +96,18 @@ input,textarea{-webkit-user-select:text;user-select:text}
 
 html,body{height:100%}
 body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-direction:column;height:100dvh}
-#tabwrap{flex:0 0 auto;display:grid;grid-template-rows:1fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1),opacity .25s ease}
-#tabwrap.off{grid-template-rows:0fr;opacity:0;pointer-events:none}
-#tabwrap .tin{min-height:0;overflow:hidden}
+#tabwrap{position:fixed;top:0;left:0;right:0;z-index:20;transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .25s ease;will-change:transform}
+#tabwrap.off{transform:translate3d(0,-110%,0);opacity:0;pointer-events:none}
+#tabwrap .tin{min-height:0}
 #tabwrap .tpad{padding:calc(10px + env(safe-area-inset-top)) 0 8px}
+#tabwrap .tpad>#tabs{position:relative}
 #tabs{position:relative;display:flex;margin:0 auto;width:min(calc(100% - 32px),488px);background:var(--card);border-radius:999px;padding:4px;flex:0 0 auto}
 #tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .25s ease}
 #tabs .tab.on{color:var(--bg)}
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 #pager::-webkit-scrollbar{display:none}
-.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:6px 16px calc(32px + env(safe-area-inset-bottom));will-change:transform,opacity}
+.pg{flex:0 0 100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;padding:calc(var(--th,76px) + 6px) 16px calc(32px + env(safe-area-inset-bottom));will-change:transform,opacity}
 .pg .in{max-width:520px;margin:0 auto}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
@@ -298,7 +299,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 109</div>
+  <div class="sub" style="margin-top:12px">build 110</div>
 </section>
 </div></div>
 </div>
@@ -915,6 +916,8 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   });});
 
   var wrap=document.getElementById('tabwrap'),lastY=new WeakMap();
+  function setTh(){var h=wrap.offsetHeight;if(h)document.documentElement.style.setProperty('--th',h+'px');}
+  setTh();window.addEventListener('resize',setTh);window.addEventListener('load',setTh);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(setTh);
   pgs.forEach(function(g){
     lastY.set(g,0);
     g.addEventListener('scroll',function(){
