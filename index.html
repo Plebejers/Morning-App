@@ -217,6 +217,10 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
 }
 .pg{scrollbar-width:none}
 .pg::-webkit-scrollbar{display:none;width:0;height:0}
+#pager{display:block;position:relative;overflow:hidden;scroll-snap-type:none;perspective:900px;perspective-origin:50% 38%;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.pg{position:absolute;inset:0;width:auto;flex:none;scroll-snap-align:none;scroll-snap-stop:normal;touch-action:pan-y;will-change:transform;visibility:hidden;contain:layout style;-webkit-user-select:auto;user-select:auto}
+.pg.vis{visibility:visible}
+#pill{animation:none!important}
 </style>
 </head>
 <body>
@@ -335,7 +339,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 125</div>
+  <div class="sub" style="margin-top:12px">build 126</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -941,52 +945,84 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
 })();
 (function(){
   var pager=document.getElementById('pager'),pill=document.getElementById('pill'),tabs=[].slice.call(document.querySelectorAll('#tabs .tab')),pgs=[].slice.call(document.querySelectorAll('.pg'));
-  var calm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,tick=false;
-  var native=window.CSS&&CSS.supports&&CSS.supports('animation-timeline','scroll()');
-  function paint(){
-    tick=false;
-    if(native)return;
-    var w=pager.clientWidth||1,p=pager.scrollLeft/w;
-    pill.style.transform='translateX('+(p*100)+'%)';
-    var cur=Math.round(p);
-    tabs.forEach(function(t,i){t.classList.toggle('on',i===cur);});
-    if(calm)return;
-    pgs.forEach(function(g,i){
-      var d=Math.min(1,Math.abs(i-p));
-      g.style.opacity=(1-d*.55).toFixed(3);
-      g.style.transform='scale('+(1-d*.04).toFixed(4)+')';
-    });
-  }
-  pager.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(paint);}},{passive:true});
-  var PK='glance-page',pst,lastCi=-1;
-  function curI(){return Math.round(pager.scrollLeft/(pager.clientWidth||1));}
-  pager.addEventListener('scroll',function(){clearTimeout(pst);pst=setTimeout(function(){try{sessionStorage.setItem(PK,String(curI()));}catch(e){}},150);},{passive:true});
-  try{var si=parseInt(sessionStorage.getItem(PK),10);if(si>0&&si<pgs.length){pager.style.scrollSnapType='none';pager.scrollLeft=si*pager.clientWidth;requestAnimationFrame(function(){pager.style.scrollSnapType='';paint();});}}catch(e){}
-  tabs.forEach(function(t){t.addEventListener('click',function(){
-    pager.scrollTo({left:(+t.getAttribute('data-i'))*pager.clientWidth,behavior:calm?'auto':'smooth'});
-  });});
-
   var wrap=document.getElementById('tabwrap'),lastY=new WeakMap();
+  var N=pgs.length,pos=0,W=1,raf=0,lastCi=-1,PK='glance-page';
   function setTh(){var h=wrap.offsetHeight;if(h)document.documentElement.style.setProperty('--th',h+'px');}
   setTh();window.addEventListener('resize',setTh);window.addEventListener('load',setTh);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(setTh);
-  pgs.forEach(function(g){
+  function showBar(){if(wrap.classList.contains('off'))wrap.classList.remove('off');}
+  function idx(){return Math.max(0,Math.min(N-1,Math.round(pos)));}
+  function render(){
+    W=pager.clientWidth||1;
+    for(var i=0;i<N;i++){
+      var g=pgs[i],off=i-pos,a=Math.abs(off);
+      if(a>=1){if(g._v){g.classList.remove('vis');g._v=0;}continue;}
+      if(!g._v){g.classList.add('vis');g._v=1;}
+      if(a<0.0005){g.style.transform='none';g.style.zIndex=3;continue;}
+      var sg=off<0?-1:1,tx=sg*W*(0.62*a+0.38*a*a*a*a);
+      g.style.transform='translate3d('+tx.toFixed(1)+'px,0,0) rotateY('+(-sg*35*a).toFixed(2)+'deg) scale('+(1-0.18*a).toFixed(4)+')';
+      g.style.zIndex=a<0.5?2:1;
+    }
+    pill.style.transform='translateX('+(pos*100).toFixed(2)+'%)';
+    var ci=idx();
+    if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});}
+  }
+  function save(){try{sessionStorage.setItem(PK,String(idx()));}catch(e){}}
+  function ease(t){return 1-Math.pow(1-t,4);}
+  function goto(t,dur){
+    t=Math.max(0,Math.min(N-1,t));cancelAnimationFrame(raf);
+    var from=pos,t0=performance.now();dur=dur||(360+Math.abs(t-from)*140);
+    showBar();
+    (function step(now){
+      var k=Math.min(1,(now-t0)/dur);pos=from+(t-from)*ease(k);render();
+      if(k<1)raf=requestAnimationFrame(step);else{pos=t;render();save();}
+    })(t0);
+  }
+  function rub(p){return p<0?p*0.3:(p>N-1?N-1+(p-(N-1))*0.3:p);}
+  var down=false,lock=null,sx=0,sy=0,sp=0,pid=0,smp=[];
+  pager.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    cancelAnimationFrame(raf);down=true;lock=null;sx=e.clientX;sy=e.clientY;sp=pos;pid=e.pointerId;smp=[{t:e.timeStamp,x:e.clientX}];
+  });
+  pager.addEventListener('pointermove',function(e){
+    if(!down||e.pointerId!==pid)return;
+    var dx=e.clientX-sx,dy=e.clientY-sy;
+    if(lock===null){
+      if(Math.abs(dx)<8&&Math.abs(dy)<8)return;
+      lock=Math.abs(dx)>Math.abs(dy)*1.1?'x':'y';
+      if(lock==='x'){try{pager.setPointerCapture(pid);}catch(_){}showBar();}
+    }
+    if(lock!=='x')return;
+    smp.push({t:e.timeStamp,x:e.clientX});while(smp.length>6||(smp.length>2&&e.timeStamp-smp[0].t>120))smp.shift();
+    pos=rub(sp-dx/(pager.clientWidth||1));render();
+  });
+  function up(cancel){
+    if(!down)return;down=false;
+    if(lock!=='x'){lock=null;return;}
+    lock=null;
+    var v=0;if(smp.length>1){var f=smp[0],l=smp[smp.length-1],dt=l.t-f.t;if(dt>0)v=-(l.x-f.x)/dt/(pager.clientWidth||1);}
+    var base=Math.round(sp),t=cancel?Math.round(pos):Math.round(pos+v*240);
+    if(!cancel&&t===base&&Math.abs(pos-sp)>0.25)t=base+(pos>sp?1:-1);
+    t=Math.max(base-1,Math.min(base+1,t));
+    goto(t);
+  }
+  pager.addEventListener('pointerup',function(){up(false);});
+  pager.addEventListener('pointercancel',function(){up(true);});
+  tabs.forEach(function(t){t.addEventListener('click',function(){goto(+t.getAttribute('data-i'));});});
+  pgs.forEach(function(g,gi){
     lastY.set(g,0);
     g.addEventListener('scroll',function(){
-      if(pgs[Math.round(pager.scrollLeft/(pager.clientWidth||1))]!==g){lastY.set(g,g.scrollTop);return;}
+      if(gi!==idx()){lastY.set(g,g.scrollTop);return;}
       var y=g.scrollTop,d=y-lastY.get(g);
-      if(y<=12){wrap.classList.remove('off');lastY.set(g,y);return;}
+      if(y<=12){showBar();lastY.set(g,y);return;}
       if(Math.abs(d)<6)return;
       lastY.set(g,y);
       if(d>0&&y>60)wrap.classList.add('off');
     },{passive:true});
   });
-  pager.addEventListener('scroll',function(){
-    var ci=Math.round(pager.scrollLeft/(pager.clientWidth||1));
-    if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});}
-    if(wrap.classList.contains('off'))wrap.classList.remove('off');
-  },{passive:true});
-  window.addEventListener('resize',paint);
-  paint();
+  try{var si=parseInt(sessionStorage.getItem(PK),10);if(si>0&&si<N)pos=si;}catch(e){}
+  window.addEventListener('resize',render);
+  render();
+  window.__pager={goto:goto,get pos(){return pos;}};
 })();
 </script>
 </body>
