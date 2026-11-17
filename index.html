@@ -302,7 +302,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 129</div>
+  <div class="sub" style="margin-top:12px">build 130</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -485,7 +485,7 @@ function renderHourly(h){
   var el=$('hourly');
   if(!h||!h.temperature_2m){el.innerHTML='';return;}
   var cur=new Date().getHours(),td='',tm='';
-  for(var i=cur;i<cur+20&&i<h.time.length;i++){
+  for(var i=cur;i<48&&i<h.time.length;i++){
     var hh=h.time[i].slice(11,13),p=h.precipitation_probability[i]||0,nx=i>=24;
     var cell='<div class="hr'+(i===cur?' now':'')+'"><div class="h">'+(i===cur?'NOW':hh+':00')+'</div>'+iconSvg(iconFor(h.weather_code[i],h.is_day?h.is_day[i]===1:(+hh>=7&&+hh<19)))+'<div class="d">'+Math.round(h.temperature_2m[i])+'&deg;</div><div class="p">'+(p>=10?p+'%':'')+'</div></div>';
     if(nx)tm+=cell;else td+=cell;
