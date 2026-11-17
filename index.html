@@ -106,10 +106,10 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
 #tabs .tab.on{color:var(--bg)}
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);background:var(--tx);border-radius:999px;will-change:transform}
-#pager{flex:1 1 0;min-height:0;position:relative;overflow:hidden;perspective:900px;perspective-origin:50% 38%;touch-action:pan-y;-webkit-user-select:none;user-select:none}
-.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;will-change:transform;visibility:hidden;contain:layout style;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));-webkit-user-select:auto;user-select:auto}
+#pager{flex:1 1 0;min-height:0;position:relative;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;visibility:hidden;contain:layout style;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));-webkit-user-select:auto;user-select:auto}
 .pg::-webkit-scrollbar{display:none;width:0;height:0}
-.pg.vis{visibility:visible}
+.pg.vis{visibility:visible;will-change:transform}
 .pg .in{max-width:560px;margin:0 auto}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
@@ -302,7 +302,7 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 127</div>
+  <div class="sub" style="margin-top:12px">build 128</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -922,7 +922,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
       if(!g._v){g.classList.add('vis');g._v=1;}
       if(a<0.0005){g.style.transform='none';g.style.zIndex=3;continue;}
       var sg=off<0?-1:1,tx=sg*W*(0.62*a+0.38*a*a*a*a);
-      g.style.transform='translate3d('+tx.toFixed(1)+'px,0,0) rotateY('+(-sg*35*a).toFixed(2)+'deg) scale('+(1-0.18*a).toFixed(4)+')';
+      g.style.transform='translate3d('+tx.toFixed(1)+'px,0,0) scale('+(1-0.1*a).toFixed(4)+')';
       g.style.zIndex=a<0.5?2:1;
     }
     pill.style.transform='translateX('+(pos*100).toFixed(2)+'%)';
@@ -941,10 +941,10 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     })(t0);
   }
   function rub(p){return p<0?p*0.3:(p>N-1?N-1+(p-(N-1))*0.3:p);}
-  var down=false,lock=null,sx=0,sy=0,sp=0,pid=0,smp=[];
+  var down=false,lock=null,sx=0,sy=0,sp=0,pid=0,smp=[],rq=0;
   pager.addEventListener('pointerdown',function(e){
     if(e.pointerType==='mouse'&&e.button!==0)return;
-    cancelAnimationFrame(raf);down=true;lock=null;sx=e.clientX;sy=e.clientY;sp=pos;pid=e.pointerId;smp=[{t:e.timeStamp,x:e.clientX}];
+    cancelAnimationFrame(raf);cancelAnimationFrame(rq);rq=0;down=true;lock=null;sx=e.clientX;sy=e.clientY;sp=pos;pid=e.pointerId;smp=[{t:e.timeStamp,x:e.clientX}];
   });
   pager.addEventListener('pointermove',function(e){
     if(!down||e.pointerId!==pid)return;
@@ -956,12 +956,13 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     }
     if(lock!=='x')return;
     smp.push({t:e.timeStamp,x:e.clientX});while(smp.length>6||(smp.length>2&&e.timeStamp-smp[0].t>120))smp.shift();
-    pos=rub(sp-dx/(pager.clientWidth||1));render();
+    pos=rub(sp-dx/(pager.clientWidth||1));
+    if(!rq){rq=requestAnimationFrame(function(){rq=0;render();});}
   });
   function up(cancel){
     if(!down)return;down=false;
     if(lock!=='x'){lock=null;return;}
-    lock=null;
+    lock=null;cancelAnimationFrame(rq);rq=0;
     var v=0;if(smp.length>1){var f=smp[0],l=smp[smp.length-1],dt=l.t-f.t;if(dt>0)v=-(l.x-f.x)/dt/(pager.clientWidth||1);}
     var base=Math.round(sp),t=cancel?Math.round(pos):Math.round(pos+v*240);
     if(!cancel&&t===base&&Math.abs(pos-sp)>0.25)t=base+(pos>sp?1:-1);
