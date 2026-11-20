@@ -107,9 +107,8 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #tabs .tab.on{color:var(--bg)}
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;position:relative;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}
-.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;visibility:hidden;contain:layout style;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));-webkit-user-select:auto;user-select:auto}
+.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;visibility:visible;will-change:transform;transform:translate3d(100%,0,0);contain:layout style;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));-webkit-user-select:auto;user-select:auto}
 .pg::-webkit-scrollbar{display:none;width:0;height:0}
-.pg.vis{visibility:visible;will-change:transform}
 .pg .in{max-width:560px;margin:0 auto}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
@@ -308,7 +307,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 133</div>
+  <div class="sub" style="margin-top:12px">build 134</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -925,8 +924,8 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     W=pager.clientWidth||1;
     for(var i=0;i<N;i++){
       var g=pgs[i],off=i-pos,a=Math.abs(off);
-      if(a>=1){if(g._v){g.classList.remove('vis');g._v=0;}continue;}
-      if(!g._v){g.classList.add('vis');g._v=1;}
+      if(a>=1){var o=off<0?-1:1;if(g._o!==o){g._o=o;g.style.transform='translate3d('+o*100+'%,0,0)';g.style.zIndex=0;}continue;}
+      g._o=0;
       if(a<0.0005){g.style.transform='none';g.style.zIndex=3;continue;}
       var sg=off<0?-1:1,tx=sg*W*(0.62*a+0.38*a*a*a*a);
       g.style.transform='translate3d('+tx.toFixed(1)+'px,0,0) scale('+(1-0.1*a).toFixed(4)+')';
