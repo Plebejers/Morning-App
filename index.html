@@ -60,8 +60,8 @@ details#setup[open] summary:after{content:'\2212'}
 #whead h2{margin:0}
 #wtemp{font:400 var(--ts)/1.05 'NDot','Doto',monospace;color:var(--tx);white-space:nowrap}
 #chead h2{margin:0;flex:0 0 auto}
-#arr{display:grid;grid-template-columns:repeat(2,auto);gap:4px;flex:0 0 auto}
-#arr button{margin:0;width:auto;padding:3px 7px 4px;background:transparent;color:var(--tx);border:1px solid var(--line);font:400 18px/1.05 'NDot','Doto',monospace;letter-spacing:0;text-transform:none}
+#arr{display:flex;justify-content:center;gap:8px;margin-top:18px}
+#arr button{margin:0;width:auto;flex:1 1 0;max-width:84px;padding:9px 0 10px;background:transparent;color:var(--tx);border:1px solid var(--line);font:400 18px/1.05 'NDot','Doto',monospace;letter-spacing:0;text-transform:none}
 #arr button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
 #arr button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
 .st{font:400 26px/1 'NDot','Doto',monospace;margin:22px 0 4px;color:var(--tx)}
@@ -200,7 +200,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <div id="pager">
 <div class="pg"><div class="in">
 <section class="card">
-  <div id="chead"><h2>Commute</h2><div id="arr"><button data-t="07:30">7:30</button><button data-t="07:45">7:45</button><button data-t="08:00">8:00</button><button data-t="08:15">8:15</button></div></div>
+  <div id="chead"><h2>Commute</h2></div>
   <div id="go" style="display:flex;flex-direction:column;margin-bottom:14px">
     <a class="btn" id="toWork" href="#" target="_blank" rel="noopener">To work</a>
     <a class="btn ghost" id="toWorkNow" href="#" target="_blank" rel="noopener">To work now</a>
@@ -209,7 +209,8 @@ html:not(.boot) body{animation:bootin .32s ease}
     <div id="rtOut"></div>
   </div>
 
-  <div style="margin-top:18px"><div class="big" id="leaveBy">--:--</div>
+  <div id="arr"><button data-t="07:30">7:30</button><button data-t="07:45">7:45</button><button data-t="08:00">8:00</button><button data-t="08:15">8:15</button></div>
+  <div style="margin-top:14px"><div class="big" id="leaveBy">--:--</div>
   <div class="sub" id="leaveSub"></div></div>
 </section>
 
@@ -308,7 +309,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 135</div>
+  <div class="sub" style="margin-top:12px">build 136</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
