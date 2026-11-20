@@ -185,11 +185,10 @@ body{background-image:linear-gradient(180deg,var(--bgt) 0%,var(--bg) 100%);backg
 .gf{display:flex;align-items:center;justify-content:center;gap:12px;margin:22px 0 0;color:var(--mu);opacity:.75}
 .gf .gi{width:22px;height:22px;display:block}
 .gf span{font:400 22px/1 'NDot','Doto','Space Mono',monospace;letter-spacing:.04em}
-html.boot body{opacity:0}
-html:not(.boot) body{animation:bootin .32s ease}
-@keyframes bootin{from{opacity:0}to{opacity:1}}
+html::before{content:'';position:fixed;inset:0;z-index:99999;pointer-events:none;background:#000 url(icon-192.png) center/112px 112px no-repeat;opacity:0;transition:opacity .35s ease}
+html.boot::before{opacity:1;transition:none}
 .card{contain:layout style}
-@media (prefers-reduced-motion:reduce){html:not(.boot) body{animation:none}}
+@media (prefers-reduced-motion:reduce){html::before{transition:none}}
 </style>
 </head>
 <body>
@@ -308,7 +307,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 133</div>
+  <div class="sub" style="margin-top:12px">build 134</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
