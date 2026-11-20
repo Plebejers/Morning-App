@@ -203,6 +203,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div id="chead"><h2>Commute</h2><div id="arr"><button data-t="07:30">7:30</button><button data-t="07:45">7:45</button><button data-t="08:00">8:00</button><button data-t="08:15">8:15</button></div></div>
   <div id="go" style="display:flex;flex-direction:column;margin-bottom:14px">
     <a class="btn" id="toWork" href="#" target="_blank" rel="noopener">To work</a>
+    <a class="btn ghost" id="toWorkNow" href="#" target="_blank" rel="noopener">To work now</a>
     <a class="btn" id="toHome" href="#" target="_blank" rel="noopener">To home</a>
     <div id="rtBtns" style="display:flex;gap:10px"><button type="button" id="rtBus" style="flex:1">Bus</button><button type="button" id="rtWalk" style="flex:1">Walk</button></div>
     <div id="rtOut"></div>
@@ -307,7 +308,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 134</div>
+  <div class="sub" style="margin-top:12px">build 135</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -367,10 +368,12 @@ function update(){
   var tgt=nextArrival(now),md={driving:0,bicycling:1,walking:2,transit:3}[S.mode];
   var wp=S.work?'/maps/dir//'+encodeURIComponent(S.work)+'/data=!4m6!4m5!2m3!6e1!7e2!8j'+(Date.UTC(tgt.getFullYear(),tgt.getMonth(),tgt.getDate(),tgt.getHours(),tgt.getMinutes())/1000)+'!3e'+(md===undefined?0:md):'';
   $('toWork').href=wp?'https://www.google.com'+wp:'#';
+  $('toWorkNow').href=S.work?'https://www.google.com/maps/dir/?api=1&travelmode=transit&destination='+encodeURIComponent(S.work):'#';
+  $('toWorkNow').style.display=S.work?'':'none';
   $('toHome').href=S.home?base+encodeURIComponent(S.home):'#';
   if(S.work){$('toWork').innerHTML='To work<small style="display:block;font-weight:400;opacity:.7;margin-top:2px;letter-spacing:.04em">arrive '+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][tgt.getDay()]+' '+S.arrive+'</small>';}else{$('toWork').textContent='Set work address';}
   $('toHome').textContent=S.home?'To home':'Set home address';
-  $('toWork').className='btn';$('toHome').className='btn';
+  $('toWork').className='btn';$('toHome').className='btn';$('toWorkNow').className='btn ghost';
   renderSteps(nm);
 }
 
