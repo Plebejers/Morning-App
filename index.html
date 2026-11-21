@@ -285,11 +285,11 @@ html:not(.boot) body{animation:bootin .32s ease}
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 <div class="pg"><div class="in">
-<section class="card">
+<section class="card" style="position:relative">
   <h2>Mood</h2>
+  <button type="button" id="mqS" aria-label="Save quote" style="position:absolute;top:14px;right:14px;width:44px;height:44px;margin:0;padding:0;background:none;border:0;color:var(--tx);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></button>
   <div id="mqT" style="font:400 19px/1.5 'Literata',Georgia,serif;margin-top:6px"></div>
   <div class="sub" id="mqA" style="margin-top:10px"></div>
-  <button type="button" class="ghost sm" id="mqS" style="margin-top:14px">Save quote</button>
 </section>
 
 <section class="card">
@@ -361,7 +361,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 144</div>
+  <div class="sub" style="margin-top:12px">build 145</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -739,7 +739,7 @@ function drawMood(){
   if(!S.mood)S.mood={};
   var td=dk(new Date()),e=S.mood[td]||{},q=MQ[Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)%MQ.length];
   mqCur=q;$('mqT').textContent='“'+q[0]+'”';$('mqA').textContent=q[1];
-  var fv=S.favq||[],sv=fv.some(function(x){return x[0]===q[0];});$('mqS').textContent=sv?'Saved':'Save quote';
+  var fv=S.favq||[],sv=fv.some(function(x){return x[0]===q[0];});$('mqS').firstChild.setAttribute('fill',sv?'currentColor':'none');$('mqS').setAttribute('aria-label',sv?'Remove from saved':'Save quote');
   $('mqSavedCard').style.display=fv.length?'':'none';
   $('mqSaved').innerHTML=fv.map(function(x,i){return '<div style="padding:12px 0;border-top:1px solid var(--line)"><div style="font:400 16px/1.5 Literata,Georgia,serif">“'+esc(x[0])+'”</div><div class="sub" style="margin-top:6px;display:flex;justify-content:space-between;gap:8px"><span>'+esc(x[1])+'</span><span data-rm="'+i+'" style="cursor:pointer;text-decoration:underline">Remove</span></div></div>';}).join('');
   $('mdDate').textContent=new Date().toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
