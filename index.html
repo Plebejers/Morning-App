@@ -211,6 +211,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Mood</div><div class="tab" data-i="3">Reading</div><div class="tab" data-i="4">Notes</div></nav></div></div></div>
 <div id="pager">
 <div class="pg"><div class="in">
+<button type="button" class="ghost" id="mdNudge" style="display:none;margin-bottom:12px">Log today's mood</button>
 <section class="card">
   <div id="chead"><h2>Commute</h2></div>
   <div id="go" style="display:flex;flex-direction:column;margin-bottom:14px">
@@ -288,6 +289,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <h2>Mood</h2>
   <div id="mqT" style="font:400 19px/1.5 'Literata',Georgia,serif;margin-top:6px"></div>
   <div class="sub" id="mqA" style="margin-top:10px"></div>
+  <button type="button" class="ghost sm" id="mqS" style="margin-top:14px">Save quote</button>
 </section>
 
 <section class="card">
@@ -306,6 +308,12 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div id="mdBars"></div>
   <div id="mdDet" class="sub" style="min-height:20px;margin-top:8px"></div>
   <div id="mdSt"></div>
+  <div id="mdWk"></div>
+</section>
+
+<section class="card" id="mqSavedCard" style="display:none">
+  <h2>Saved</h2>
+  <div id="mqSaved"></div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div>
 </div></div>
@@ -350,7 +358,10 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 143</div>
+  <div class="sub" style="margin:16px 0 8px">Backup</div>
+  <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
+  <input type="file" id="bkF" accept=".json,application/json" hidden>
+  <div class="sub" style="margin-top:12px">build 144</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -687,7 +698,9 @@ function loadRecap(){
     var d=new Date(j.d+'T12:00:00'),lbl=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
     var col=j.tone==='bullish'?'#1fb85a':j.tone==='bearish'?'#e5392e':'inherit';
     var lead=(j.tone?'<b style="color:'+col+'">'+esc(j.label||j.tone)+'.</b> ':'')+(j.mood?esc(j.mood)+' ':'');
-    $('rcOut').innerHTML='<div class="sub">Close of '+esc(lbl)+'</div><div style="margin-top:8px;line-height:1.5">'+lead+esc(j.text)+'</div>'
+    var ex=new Date();if(ex.getHours()<19)ex.setDate(ex.getDate()-1);while(ex.getDay()===0||ex.getDay()===6)ex.setDate(ex.getDate()-1);
+    var stale=j.d&&j.d<dk(ex);
+    $('rcOut').innerHTML='<div class="sub">Close of '+esc(lbl)+'</div>'+(stale?'<div class="sub" style="margin-top:4px;color:#e8742c">Newer recap has not arrived yet.</div>':'')+'<div style="margin-top:8px;line-height:1.5">'+lead+esc(j.text)+'</div>'
       +(j.veqt?'<div class="st">For VEQT</div>'+(Array.isArray(j.veqt)?j.veqt.map(function(v){return '<div style="margin-top:10px;line-height:1.5"><b>'+esc(v.n)+'</b> <b style="color:'+(Math.abs(v.p)<0.05?'inherit':v.p>0?'#1fb85a':'#e5392e')+'">'+(v.p>=0.05?'+':'')+v.p.toFixed(1)+'%</b> <span class="sub">'+esc(v.r)+'</span><br>'+esc(v.t)+'</div>';}).join(''):'<div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>'):'');
   }).catch(function(){});
 }
@@ -721,10 +734,14 @@ function dk(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<
 function mDays(n){var o=[],t=new Date();t.setHours(12,0,0,0);for(var i=n-1;i>=0;i--){var d=new Date(t);d.setDate(t.getDate()-i);o.push(dk(d));}return o;}
 function mAvg(a){var v=a.filter(function(x){return x;}).map(function(x){return x.m;});return v.length?v.reduce(function(p,c){return p+c;},0)/v.length:null;}
 var mSel=null;
+var mqCur=null;
 function drawMood(){
   if(!S.mood)S.mood={};
   var td=dk(new Date()),e=S.mood[td]||{},q=MQ[Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)%MQ.length];
-  $('mqT').textContent='“'+q[0]+'”';$('mqA').textContent=q[1];
+  mqCur=q;$('mqT').textContent='“'+q[0]+'”';$('mqA').textContent=q[1];
+  var fv=S.favq||[],sv=fv.some(function(x){return x[0]===q[0];});$('mqS').textContent=sv?'Saved':'Save quote';
+  $('mqSavedCard').style.display=fv.length?'':'none';
+  $('mqSaved').innerHTML=fv.map(function(x,i){return '<div style="padding:12px 0;border-top:1px solid var(--line)"><div style="font:400 16px/1.5 Literata,Georgia,serif">“'+esc(x[0])+'”</div><div class="sub" style="margin-top:6px;display:flex;justify-content:space-between;gap:8px"><span>'+esc(x[1])+'</span><span data-rm="'+i+'" style="cursor:pointer;text-decoration:underline">Remove</span></div></div>';}).join('');
   $('mdDate').textContent=new Date().toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
   $('mdM').innerHTML=ML.map(function(l,i){return '<button data-m="'+(i+1)+'"'+(e.m===i+1?' class="on"':'')+'><b>'+(i+1)+'</b>'+l+'</button>';}).join('');
   $('mdW').innerHTML=WL.map(function(l,i){return '<button data-w="'+(i+1)+'"'+(e.w===i+1?' class="on"':'')+'>'+l+'</button>';}).join('');
@@ -747,7 +764,38 @@ function drawMood(){
     if(hv.length>=3&&lt.length>=3)h+='<div style="margin-top:14px;line-height:1.5">On heavy work days your mood averages <b>'+mAvg(hv).toFixed(1)+'</b>, against <b>'+mAvg(lt).toFixed(1)+'</b> on lighter days.</div>';
   }else h='<div class="sub" style="margin-top:14px">Log a day to start the overview.</div>';
   $('mdSt').innerHTML=h;
+  var wd=[[],[],[],[],[],[],[]],WN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],tot=0;
+  Object.keys(S.mood).forEach(function(k){var x=S.mood[k];if(x&&x.m){wd[(new Date(k+'T12:00:00').getDay()+6)%7].push(x.m);tot++;}});
+  $('mdWk').innerHTML='';
+  if(tot>=14){
+    var av=wd.map(function(a){return a.length>=2?a.reduce(function(p,c){return p+c;},0)/a.length:null;}),ok=av.filter(function(x){return x!==null;});
+    if(ok.length>=4){var lo=Math.min.apply(null,ok),hi=Math.max.apply(null,ok);
+      $('mdWk').innerHTML='<div class="sub" style="margin-top:18px">By weekday</div><div class="mst" style="margin-top:10px">'+av.map(function(x,i){return '<div><b'+(lo<hi&&x===lo?' style="color:#e5392e"':lo<hi&&x===hi?' style="color:#1fb85a"':'')+'>'+(x===null?'-':x.toFixed(1))+'</b><span class="sub">'+WN[i]+'</span></div>';}).join('')+'</div>';}
+  }
+  mdNudge();
 }
+function mdNudge(){var n=new Date(),e=S.mood&&S.mood[dk(n)];$('mdNudge').style.display=(n.getHours()*60+n.getMinutes()>=930&&!(e&&e.m))?'block':'none';}
+$('mdNudge').addEventListener('click',function(){var t=[].slice.call(document.querySelectorAll('#tabs .tab')).map(function(x){return x.textContent.trim();}).indexOf('Mood');if(t>=0&&window.__pager)window.__pager.goto(t);});
+$('mqS').addEventListener('click',function(){if(!mqCur)return;var f=S.favq||(S.favq=[]),i=-1;f.forEach(function(x,k){if(x[0]===mqCur[0])i=k;});if(i>=0)f.splice(i,1);else f.unshift([mqCur[0],mqCur[1]]);save();drawMood();});
+$('mqSaved').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-rm');if(r&&S.favq){S.favq.splice(+r,1);save();drawMood();}});
+setInterval(mdNudge,60000);document.addEventListener('visibilitychange',mdNudge);
+var BK=['morning-v1','morning-v1-fold','morning-v1-read','glance-theme'];
+$('bkOut').addEventListener('click',function(){
+  save();var o={app:'glance',v:1,t:new Date().toISOString(),keys:{}};
+  BK.forEach(function(k){try{var v=localStorage.getItem(k);if(v!==null)o.keys[k]=v;}catch(e){}});
+  var b=new Blob([JSON.stringify(o)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download='glance-backup-'+dk(new Date())+'.json';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
+});
+$('bkIn').addEventListener('click',function(){$('bkF').click();});
+$('bkF').addEventListener('change',function(){
+  var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();
+  rd.onload=function(){
+    var o;try{o=JSON.parse(rd.result);if(!o||o.app!=='glance'||!o.keys||!o.keys['morning-v1'])throw 0;JSON.parse(o.keys['morning-v1']);}catch(e){alert('That file is not a Glance backup.');return;}
+    if(!confirm('Replace everything on this phone with this backup?'))return;
+    BK.forEach(function(k){if(typeof o.keys[k]==='string')localStorage.setItem(k,o.keys[k]);});location.reload();
+  };rd.readAsText(f);this.value='';
+});
 function mSet(f,v){var td=dk(new Date());if(!S.mood)S.mood={};var e=S.mood[td]||(S.mood[td]={});if(f==='n'){e.n=v;}else e[f]=(e[f]===v&&f==='w')?0:v;save();if(f!=='n')drawMood();}
 $('mdM').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(b)mSet('m',+b.getAttribute('data-m'));});
 $('mdW').addEventListener('click',function(e){var b=e.target.closest('[data-w]');if(b)mSet('w',+b.getAttribute('data-w'));});
