@@ -86,6 +86,18 @@ li.step small.tm{color:var(--mu);font-size:11px}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,textarea{-webkit-user-select:text;user-select:text}
 #wtemp,.card h2{outline:none}
+.mdr{display:flex;gap:6px;margin-top:10px}
+.mdr button{margin:0;flex:1;width:auto;padding:10px 0 8px;background:transparent;color:var(--tx);border:1px solid var(--line);border-radius:16px;font:400 12px/1.2 'Space Mono',monospace;letter-spacing:.02em;text-transform:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.mdr button b{font:400 26px/1 'NDot','Doto',monospace}
+.mdr button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.mdw button{padding:10px 0;border-radius:999px}
+#mdBars{display:flex;align-items:flex-end;gap:2px;height:84px;margin-top:14px}
+#mdBars i{flex:1;border-radius:2px;min-width:2px;cursor:pointer}
+#mdBars i.cur{outline:1.5px solid var(--tx);outline-offset:1px}
+.mst{display:flex;justify-content:space-between;gap:6px;margin-top:14px}
+.mst div{flex:1;text-align:center}
+.mst b{display:block;font:400 22px/1 'NDot','Doto',monospace}
+.mst span{font-size:11px}
 .rng{display:flex;gap:6px;margin-top:10px}
 .rng button{margin:0;width:auto;padding:3px 9px 4px;background:transparent;color:var(--tx);border:1px solid var(--line);font:400 16px/1.05 'NDot','Doto',monospace;letter-spacing:0;text-transform:none}
 .rng button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
@@ -105,7 +117,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #tabs{position:relative;display:flex;margin:0 auto;width:min(calc(100% - 16px),504px);background:var(--card);border:1px solid color-mix(in srgb,var(--tx) 9%,transparent);border-radius:999px;padding:4px;flex:0 0 auto}
 #tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
 #tabs .tab.on{color:var(--bg)}
-#pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);background:var(--tx);border-radius:999px;will-change:transform}
+#pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/5);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;position:relative;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}
 .pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;visibility:visible;will-change:transform;transform:translate3d(100%,0,0);contain:layout style;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));-webkit-user-select:auto;user-select:auto}
 .pg::-webkit-scrollbar{display:none;width:0;height:0}
@@ -196,7 +208,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <div id="clock" class="hide">--:--</div>
 
 <div id="ptr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
-<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Reading</div><div class="tab" data-i="2">Markets</div><div class="tab" data-i="3">Notes</div></nav></div></div></div>
+<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Reading</div><div class="tab" data-i="3">Mood</div><div class="tab" data-i="4">Notes</div></nav></div></div></div>
 <div id="pager">
 <div class="pg"><div class="in">
 <section class="card">
@@ -246,16 +258,6 @@ html:not(.boot) body{animation:bootin .32s ease}
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 <div class="pg"><div class="in">
-<section class="card" id="rdCard" data-t="app" data-f="serif">
-  <h2>Reading</h2>
-  <div id="rdBar"><button type="button" class="sm ghost" data-p="lib">Library</button><button type="button" class="sm ghost" data-p="toc">Contents</button><button type="button" class="sm ghost" data-p="set">Aa</button></div>
-  <div id="rdPanel"></div>
-  <div id="rdHead"><div class="sub">Loading...</div></div>
-  <div id="rdText"></div>
-  <div id="rdNav"></div>
-</section>
-<div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
-<div class="pg"><div class="in">
 <section class="card">
   <h2>Markets</h2>
   <div id="mkVeqt"></div>
@@ -281,6 +283,43 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div id="gNews"></div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
+<div class="pg"><div class="in">
+<section class="card" id="rdCard" data-t="app" data-f="serif">
+  <h2>Reading</h2>
+  <div id="rdBar"><button type="button" class="sm ghost" data-p="lib">Library</button><button type="button" class="sm ghost" data-p="toc">Contents</button><button type="button" class="sm ghost" data-p="set">Aa</button></div>
+  <div id="rdPanel"></div>
+  <div id="rdHead"><div class="sub">Loading...</div></div>
+  <div id="rdText"></div>
+  <div id="rdNav"></div>
+</section>
+<div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
+<div class="pg"><div class="in">
+<section class="card">
+  <h2>Mood</h2>
+  <div id="mqT" style="font:400 19px/1.5 'Literata',Georgia,serif;margin-top:6px"></div>
+  <div class="sub" id="mqA" style="margin-top:10px"></div>
+</section>
+
+<section class="card">
+  <h2>Today</h2>
+  <div class="sub" id="mdDate"></div>
+  <div class="st" style="margin-top:16px">How are you</div>
+  <div id="mdM" class="mdr"></div>
+  <div class="st">How heavy was work</div>
+  <div id="mdW" class="mdr mdw"></div>
+  <input type="text" id="mdN" maxlength="140" placeholder="One line about today" style="margin-top:14px">
+</section>
+
+<section class="card">
+  <h2>Overview</h2>
+  <div class="rng" id="mdR"></div>
+  <div id="mdBars"></div>
+  <div id="mdDet" class="sub" style="min-height:20px;margin-top:8px"></div>
+  <div id="mdSt"></div>
+  <div class="sub" style="font-size:12px;margin-top:18px;line-height:1.5">If it feels too heavy, you can call or text <a href="tel:988" style="color:inherit;white-space:nowrap">9-8-8</a> any time (Canada, free, 24/7).</div>
+</section>
+<div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div>
+</div></div>
 <div class="pg"><div class="in">
 <section class="card">
   <h2>Notes</h2>
@@ -312,7 +351,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 139</div>
+  <div class="sub" style="margin-top:12px">build 140</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -653,6 +692,68 @@ function loadRecap(){
       +(j.veqt?'<div class="st">For VEQT</div>'+(Array.isArray(j.veqt)?j.veqt.map(function(v){return '<div style="margin-top:10px;line-height:1.5"><b>'+esc(v.n)+'</b> <b style="color:'+(Math.abs(v.p)<0.05?'inherit':v.p>0?'#1fb85a':'#e5392e')+'">'+(v.p>=0.05?'+':'')+v.p.toFixed(1)+'%</b> <span class="sub">'+esc(v.r)+'</span><br>'+esc(v.t)+'</div>';}).join(''):'<div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>'):'');
   }).catch(function(){});
 }
+
+var MQ=[
+['Above all, don\'t lie to yourself.','Dostoevsky, The Brothers Karamazov'],
+['Love in action is a harsh and dreadful thing compared with love in dreams.','Dostoevsky, The Brothers Karamazov'],
+['If you do not attain happiness, always remember that you are on the right road, and try not to leave it.','Dostoevsky, The Brothers Karamazov'],
+['Do not trouble. Make yourself quite at home. And, above all, do not be so ashamed of yourself, for that is at the root of it all.','Dostoevsky, The Brothers Karamazov'],
+['Life is paradise, and we are all in paradise, but we won\'t see it, if we would, we should have heaven on earth the next day.','Dostoevsky, The Brothers Karamazov'],
+['My friends, pray to God for gladness. Be glad as children, as the birds of heaven.','Dostoevsky, The Brothers Karamazov'],
+['Loving humility is marvelously strong, the strongest of all things, and there is nothing else like it.','Dostoevsky, The Brothers Karamazov'],
+['Ah, children, ah, dear friends, don\'t be afraid of life! How good life is when one does something good and just!','Dostoevsky, The Brothers Karamazov'],
+['There is nothing higher and stronger and more wholesome and good for life in the future than some good memory, especially a memory of childhood, of home.','Dostoevsky, The Brothers Karamazov'],
+['Don\'t be in a hurry, Alyosha, you hurry and worry yourself. There\'s no need to hurry now.','Dostoevsky, The Brothers Karamazov'],
+['Pain and suffering are always inevitable for a large intelligence and a deep heart.','Dostoevsky, Crime and Punishment'],
+['Man is fond of counting his troubles, but he does not count his joys. If he counted them up as he ought to, he would see that every lot has enough happiness provided for it.','Dostoevsky, Notes from Underground'],
+['The strongest of all warriors are these two: Time and Patience.','Tolstoy, War and Peace'],
+['He who fears he shall suffer, already suffers what he fears.','Montaigne, Essays'],
+['I have discovered that all the unhappiness of men arises from one single fact, that they cannot stay quietly in their own chamber.','Pascal, Pensees'],
+['All that is very well, but let us cultivate our garden.','Voltaire, Candide'],
+['He will win who knows when to fight and when not to fight.','Sun Tzu, The Art of War'],
+['To fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy\'s resistance without fighting.','Sun Tzu, The Art of War'],
+['Let your plans be dark and impenetrable as night, and when you move, fall like a thunderbolt.','Sun Tzu, The Art of War']
+];
+var MC=['#e5392e','#e8742c','#9a9a9a','#7fbf3f','#1fb85a'],ML=['Rough','Low','Okay','Good','Great'],WL=['Light','Okay','Heavy','Too much'];
+function dk(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x;}
+function mDays(n){var o=[],t=new Date();t.setHours(12,0,0,0);for(var i=n-1;i>=0;i--){var d=new Date(t);d.setDate(t.getDate()-i);o.push(dk(d));}return o;}
+function mAvg(a){var v=a.filter(function(x){return x;}).map(function(x){return x.m;});return v.length?v.reduce(function(p,c){return p+c;},0)/v.length:null;}
+var mSel=null;
+function drawMood(){
+  if(!S.mood)S.mood={};
+  var td=dk(new Date()),e=S.mood[td]||{},q=MQ[Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)%MQ.length];
+  $('mqT').textContent='“'+q[0]+'”';$('mqA').textContent=q[1];
+  $('mdDate').textContent=new Date().toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
+  $('mdM').innerHTML=ML.map(function(l,i){return '<button data-m="'+(i+1)+'"'+(e.m===i+1?' class="on"':'')+'><b>'+(i+1)+'</b>'+l+'</button>';}).join('');
+  $('mdW').innerHTML=WL.map(function(l,i){return '<button data-w="'+(i+1)+'"'+(e.w===i+1?' class="on"':'')+'>'+l+'</button>';}).join('');
+  if(document.activeElement!==$('mdN'))$('mdN').value=e.n||'';
+  var rg=S.mdR||30;
+  $('mdR').innerHTML=[[7,'7D'],[30,'30D'],[90,'90D']].map(function(r){return '<button data-r="'+r[0]+'"'+(r[0]===rg?' class="on"':'')+'>'+r[1]+'</button>';}).join('');
+  var days=mDays(rg),ent=days.map(function(k){return S.mood[k]&&S.mood[k].m?S.mood[k]:null;});
+  $('mdBars').innerHTML=days.map(function(k,i){var x=ent[i];return x?'<i data-d="'+k+'" style="height:'+(x.m/5*100)+'%;background:'+MC[x.m-1]+(k===mSel?';outline:1.5px solid var(--tx);outline-offset:1px':'')+'"></i>':'<i data-d="'+k+'" style="height:4px;background:var(--line)"></i>';}).join('');
+  var sx=mSel&&S.mood[mSel]&&S.mood[mSel].m?S.mood[mSel]:null;
+  $('mdDet').textContent=sx?new Date(mSel+'T12:00:00').toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'})+': '+ML[sx.m-1]+(sx.w?', work '+WL[sx.w-1].toLowerCase():'')+(sx.n?'. '+sx.n:''):'';
+  var cur=mAvg(ent),prev=mAvg(mDays(rg*2).slice(0,rg).map(function(k){return S.mood[k]&&S.mood[k].m?S.mood[k]:null;})),n=ent.filter(function(x){return x;}).length;
+  var st=0;(function(){var t=new Date();t.setHours(12,0,0,0);if(!(S.mood[dk(t)]&&S.mood[dk(t)].m))t.setDate(t.getDate()-1);while(S.mood[dk(t)]&&S.mood[dk(t)].m){st++;t.setDate(t.getDate()-1);}})();
+  var h='';
+  if(n){
+    var dl=cur!==null&&prev!==null?cur-prev:null;
+    h='<div class="mst"><div><b>'+cur.toFixed(1)+'</b><span class="sub">Average</span></div>'
+     +'<div><b>'+(dl===null||Math.abs(dl)<0.15?'=':dl>0?'+'+dl.toFixed(1):dl.toFixed(1))+'</b><span class="sub">vs before</span></div>'
+     +'<div><b>'+n+'</b><span class="sub">Days logged</span></div><div><b>'+st+'</b><span class="sub">Streak</span></div></div>';
+    var all=Object.keys(S.mood).map(function(k){return S.mood[k];}).filter(function(x){return x&&x.m&&x.w;}),hv=all.filter(function(x){return x.w>=3;}),lt=all.filter(function(x){return x.w<=2;});
+    if(hv.length>=3&&lt.length>=3)h+='<div style="margin-top:14px;line-height:1.5">On heavy work days your mood averages <b>'+mAvg(hv).toFixed(1)+'</b>, against <b>'+mAvg(lt).toFixed(1)+'</b> on lighter days.</div>';
+  }else h='<div class="sub" style="margin-top:14px">Log a day to start the overview.</div>';
+  $('mdSt').innerHTML=h;
+}
+function mSet(f,v){var td=dk(new Date());if(!S.mood)S.mood={};var e=S.mood[td]||(S.mood[td]={});if(f==='n'){e.n=v;}else e[f]=(e[f]===v&&f==='w')?0:v;save();if(f!=='n')drawMood();}
+$('mdM').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(b)mSet('m',+b.getAttribute('data-m'));});
+$('mdW').addEventListener('click',function(e){var b=e.target.closest('[data-w]');if(b)mSet('w',+b.getAttribute('data-w'));});
+$('mdN').addEventListener('input',function(){mSet('n',this.value.slice(0,140));});
+$('mdN').addEventListener('blur',drawMood);
+$('mdR').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){S.mdR=+r;save();drawMood();}});
+$('mdBars').addEventListener('click',function(e){var d=e.target.getAttribute&&e.target.getAttribute('data-d');if(d){mSel=mSel===d?null:d;drawMood();}});
+drawMood();setInterval(function(){if(document.activeElement!==$('mdN'))drawMood();},10*60*1000);
 
 var fgD=null;
 function fgCol(s){return s<25?'#e5392e':s<45?'#e8742c':s<55?'#9a9a9a':s<75?'#7fbf3f':'#1fb85a';}
