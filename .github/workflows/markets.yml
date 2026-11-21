@@ -14,8 +14,11 @@ jobs:
         with:
           node-version: 20
       - run: node scripts/markets.mjs
+      - run: node scripts/fng.mjs
+        continue-on-error: true
       - run: |
           git config user.name "markets-bot"
           git config user.email "bot@users.noreply.github.com"
           git add markets.json
+          [ -f fng.json ] && git add fng.json || true
           git diff --cached --quiet || (git commit -m "update markets" && git pull --rebase -q && git push)

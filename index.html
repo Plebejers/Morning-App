@@ -267,6 +267,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <section class="card">
   <h2>Recap</h2>
   <div id="rcOut"><div class="sub">No recap yet.</div></div>
+  <div id="fgOut"></div>
 </section>
 
 <section class="card">
@@ -311,7 +312,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
-  <div class="sub" style="margin-top:12px">build 138</div>
+  <div class="sub" style="margin-top:12px">build 139</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -623,6 +624,10 @@ function drawVeqt(){
   $('mkVeqt').innerHTML='<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="sub">VEQT</span><span style="font:400 28px NDot,monospace">$'+v.p.toFixed(2)+' '+pctTxt(pct)+'</span></div>'+rngBar(rg)+spark(c,pct);
 }
 $('mkVeqt').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){S.rngM=r;save();drawVeqt();}});
+function futClosed(){
+  try{var p={};new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',hour12:false}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value;});
+  var h=+p.hour%24,w=p.weekday;return w==='Sat'||(w==='Fri'&&h>=17)||(w==='Sun'&&h<18);}catch(e){return false;}
+}
 function loadMarkets(){
   var syms=[['VEQT.TO','VEQT'],['ES=F','S&P 500'],['NQ=F','Nasdaq'],['YM=F','Dow']];
   mkData().then(function(o){
@@ -636,7 +641,7 @@ function loadMarkets(){
     for(var i=1;i<4;i++){var d=r[i];h+='<div style="display:flex;justify-content:space-between;margin-top:10px"><span class="sub">'+syms[i][1]+' futures</span><span style="font:400 22px NDot,monospace">'+(d?pctTxt(d.pct):'n/a')+'</span></div>';if(d){sum+=d.pct;n++;}}
     $('mkFut').innerHTML=h;
     var up=o.t?' Updated '+new Date(o.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'.':'';
-    if(n){var a=sum/n;$('mkSum').textContent='US futures: '+(Math.abs(a)<0.15?'flat':a>0?'pointing higher':'pointing lower')+' ('+pctTxt(a)+' avg).'+up;}
+    if(n){var a=sum/n;$('mkSum').textContent=futClosed()?'US futures are closed until Sunday 18:00 ET. Showing the last session: '+pctTxt(a)+' avg.'+up:'US futures: '+(Math.abs(a)<0.15?'flat':a>0?'pointing higher':'pointing lower')+' ('+pctTxt(a)+' avg).'+up;}
   });
 }
 function loadRecap(){
@@ -648,6 +653,31 @@ function loadRecap(){
       +(j.veqt?'<div class="st">For VEQT</div>'+(Array.isArray(j.veqt)?j.veqt.map(function(v){return '<div style="margin-top:10px;line-height:1.5"><b>'+esc(v.n)+'</b> <b style="color:'+(Math.abs(v.p)<0.05?'inherit':v.p>0?'#1fb85a':'#e5392e')+'">'+(v.p>=0.05?'+':'')+v.p.toFixed(1)+'%</b> <span class="sub">'+esc(v.r)+'</span><br>'+esc(v.t)+'</div>';}).join(''):'<div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>'):'');
   }).catch(function(){});
 }
+
+var fgD=null;
+function fgCol(s){return s<25?'#e5392e':s<45?'#e8742c':s<55?'#9a9a9a':s<75?'#7fbf3f':'#1fb85a';}
+function fgLbl(s){return s<25?'Extreme fear':s<45?'Fear':s<55?'Neutral':s<75?'Greed':'Extreme greed';}
+function drawFg(){
+  var d=fgD;if(!d){$('fgOut').innerHTML='';return;}
+  var rg=S.fgR||'1y',n=rg==='1mo'?31:rg==='6mo'?184:9999,c=d.h.slice(-n).map(function(p){return p[1];});
+  var sc=d.score,cmp=[['Prev close',d.pc],['1 week',d.w],['1 month',d.m],['1 year',d.y]].filter(function(x){return x[1]!=null;});
+  var bar='<div style="display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:12px;position:relative">'+['#e5392e','#e8742c','#9a9a9a','#7fbf3f','#1fb85a'].map(function(k,i){return '<div style="flex:'+[25,20,10,20,25][i]+';background:'+k+';opacity:.55"></div>';}).join('')+'<div style="position:absolute;top:-2px;bottom:-2px;width:3px;left:calc('+sc+'% - 1px);background:var(--tx);border-radius:2px"></div></div>';
+  var tm=d.t?new Date(d.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false}):'';
+  $('fgOut').innerHTML='<div class="st">Fear &amp; greed index</div>'
+   +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px"><span class="sub">'+fgLbl(sc)+'</span><span style="font:400 28px NDot,monospace;color:'+fgCol(sc)+'">'+sc+'</span></div>'
+   +bar
+   +'<div style="display:flex;justify-content:space-between;margin-top:12px;gap:6px">'+cmp.map(function(x){return '<div style="text-align:center;flex:1"><div style="font:400 20px NDot,monospace;color:'+fgCol(x[1])+'">'+x[1]+'</div><div class="sub" style="font-size:11px">'+x[0]+'</div></div>';}).join('')+'</div>'
+   +'<div class="rng" style="margin-top:12px">'+[['1mo','1M'],['6mo','6M'],['1y','1Y']].map(function(r){return '<button data-f="'+r[0]+'"'+(r[0]===rg?' class="on"':'')+'>'+r[1]+'</button>';}).join('')+'</div>'
+   +spark(c,sc-50)
+   +'<div class="sub" style="font-size:11px;margin-top:6px">CNN'+(tm?' · updated '+tm:'')+'</div>';
+}
+$('fgOut').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-f');if(r){S.fgR=r;save();drawFg();}});
+function loadFng(){
+  fetch('fng.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    if(!j||typeof j.score!=='number'||!j.h||j.h.length<2)throw 0;fgD=j;drawFg();
+  }).catch(function(){});
+}
+loadFng();setInterval(loadFng,20*60*1000);
 loadRecap();setInterval(loadRecap,30*60*1000);
 loadMarkets();setInterval(loadMarkets,10*60*1000);
 
