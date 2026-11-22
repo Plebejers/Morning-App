@@ -229,10 +229,10 @@ body,.card,#tabs{transition:background-color .3s ease,color .3s ease}
 :root[data-style="ios"] .alert{background:var(--ios);color:#fff;border-radius:12px}
 :root[data-style="ios"] li.step{border-bottom:1px solid var(--line)}
 /* Material You style */
-:root[data-style="material"]{--mp:#d0bcff;--mpt:#381e72;--msc:#4a4458;--msct:#e8def8}
-:root[data-style="material"]:not([data-theme]),:root[data-style="material"][data-theme="dark"]{--bg:#141218;--card:#211f26;--card2:#2b2930;--line:#49454f;--tx:#e6e0e9;--mu:#cac4d0;--dim:#49454f;--bgt:#141218;--mp:#d0bcff;--mpt:#381e72;--msc:#4a4458;--msct:#e8def8}
-@media (prefers-color-scheme:light){:root[data-style="material"]:not([data-theme]){--bg:#fef7ff;--card:#f3edf7;--card2:#e7e0ec;--line:#cac4d0;--tx:#1d1b20;--mu:#49454f;--dim:#cac4d0;--bgt:#fef7ff;--mp:#6750a4;--mpt:#fff;--msc:#e8def8;--msct:#1d192b}}
-:root[data-style="material"][data-theme="light"]{--bg:#fef7ff;--card:#f3edf7;--card2:#e7e0ec;--line:#cac4d0;--tx:#1d1b20;--mu:#49454f;--dim:#cac4d0;--bgt:#fef7ff;--mp:#6750a4;--mpt:#fff;--msc:#e8def8;--msct:#1d192b}
+:root[data-style="material"]{--mp:#e3e3e3;--mpt:#1c1c1c;--msc:#3d3d3d;--msct:#f0f0f0}
+:root[data-style="material"]:not([data-theme]),:root[data-style="material"][data-theme="dark"]{--bg:#0f0f0f;--card:#1c1c1c;--card2:#2a2a2a;--line:#444;--tx:#e8e8e8;--mu:#b0b0b0;--dim:#444;--bgt:#0f0f0f;--mp:#e3e3e3;--mpt:#1c1c1c;--msc:#3d3d3d;--msct:#f0f0f0}
+@media (prefers-color-scheme:light){:root[data-style="material"]:not([data-theme]){--bg:#fafafa;--card:#f0f0f0;--card2:#e4e4e4;--line:#c8c8c8;--tx:#1c1c1c;--mu:#555;--dim:#c8c8c8;--bgt:#fafafa;--mp:#303030;--mpt:#fff;--msc:#dcdcdc;--msct:#1c1c1c}}
+:root[data-style="material"][data-theme="light"]{--bg:#fafafa;--card:#f0f0f0;--card2:#e4e4e4;--line:#c8c8c8;--tx:#1c1c1c;--mu:#555;--dim:#c8c8c8;--bgt:#fafafa;--mp:#303030;--mpt:#fff;--msc:#dcdcdc;--msct:#1c1c1c}
 :root[data-style="material"][data-theme="pink"]{--mp:#8b4a62;--mpt:#fff;--msc:#ffd9e3;--msct:#3a071d}
 :root[data-style="material"][data-theme="maroon"]{--mp:#ffb2bc;--mpt:#5f1126;--msc:#7b2f3c;--msct:#ffd9dd}
 :root[data-style="material"][data-theme="green"]{--mp:#7fd9a0;--mpt:#00391f;--msc:#1b5130;--msct:#a9f4c0}
@@ -413,7 +413,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <section class="card" id="setupCard">
   <h2>Setup</h2>
   <div class="sub" style="margin-bottom:8px">Style</div>
-  <div id="sty" class="thm2"><div class="th" data-s=""><i style="background:#000;box-shadow:inset 0 0 0 3px #000,inset 0 0 0 4px #fff"></i>Nothing</div><div class="th" data-s="ios"><i style="background:#0a84ff"></i>iOS</div><div class="th" data-s="material"><i style="background:#6750a4"></i>Material</div></div>
+  <div id="sty" class="thm2"><div class="th" data-s=""><i style="background:#000;box-shadow:inset 0 0 0 3px #000,inset 0 0 0 4px #fff"></i>Nothing</div><div class="th" data-s="ios"><i style="background:#0a84ff"></i>iOS</div><div class="th" data-s="material"><i style="background:#7f7f7f"></i>Material</div></div>
   <div class="sub" style="margin-bottom:8px">Color</div>
   <div id="thm"><div class="th" data-t=""><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>Auto</div><div class="th" data-t="light"><i style="background:#fff"></i>White</div><div class="th" data-t="dark"><i style="background:#000"></i>Black</div><div class="th" data-t="pink"><i style="background:#f6c9d8"></i>Pink</div><div class="th" data-t="maroon"><i style="background:#6b1428"></i>Maroon</div><div class="th" data-t="green"><i style="background:#14513a"></i>Green</div><div class="th" data-t="blue"><i style="background:#1d4fb8"></i>Blue</div></div>
   <div class="row">
@@ -440,7 +440,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 154</div>
+  <div class="sub" style="margin-top:12px">build 155</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
