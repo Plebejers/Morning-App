@@ -442,10 +442,12 @@ html:not(.boot) body{animation:bootin .32s ease}
   </div>
   <button class="ghost" id="locBtn">Use my location</button>
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
+  <div class="sub" style="margin:16px 0 0">Portfolio (VEQT)</div>
+  <div class="row"><label>Shares<input type="number" inputmode="decimal" id="pfSh"></label><label>Avg cost ($)<input type="number" inputmode="decimal" id="pfAv"></label></div>
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 156</div>
+  <div class="sub" style="margin-top:12px">build 157</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -758,14 +760,11 @@ function drawVeqt(){
 }
 $('mkVeqt').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){S.rngM=r;save();drawVeqt();}});
 
-var pfEdit=false;
 function mny(x,d){var a=Math.abs(x).toLocaleString('en-CA',{minimumFractionDigits:d,maximumFractionDigits:d});return (x<0?'-':'')+'$'+a;}
 function pfSig(x){return (x>=0?'+':'-')+mny(Math.abs(x),2);}
 function drawPf(){
   var o=$('pfOut');if(!o)return;var h=S.pf;
-  if(!h||!(h.sh>0)||!(h.avg>0)||pfEdit){
-    o.innerHTML='<div class="sub">VEQT holding, stored only on this phone.</div><div class="row"><label>Shares<input type="number" inputmode="decimal" id="pfSh" value="'+(h&&h.sh||'')+'"></label><label>Avg cost ($)<input type="number" inputmode="decimal" id="pfAv" value="'+(h&&h.avg||'')+'"></label></div><div style="display:flex;gap:8px;margin-top:12px"><button type="button" class="sm" data-pf="save">Save</button>'+(h&&h.sh>0?'<button type="button" class="ghost sm" data-pf="cancel">Cancel</button>':'')+'</div>';return;
-  }
+  if(!h||!(h.sh>0)||!(h.avg>0)){o.innerHTML='<div class="sub">Enter your shares and average cost in Notes, under Setup.</div>';return;}
   var v=mkV;if(!v){o.innerHTML='<div class="sub">Waiting for the VEQT price.</div>';return;}
   var rg=S.rngP||'1d',c=rg==='1d'?v.c:(mkVRL[rg]||mkVR[rg]||[]);
   if(rg!=='1d'&&!mkVRL[rg]&&(S.proxy||'')&&!mkVRT[rg]){mkVRT[rg]=1;stkChart('VEQT.TO',rg).then(function(j){var q=(j.chart.result[0].indicators.quote[0].close||[]).filter(function(x){return x!=null;});if(q.length>1){mkVRL[rg]=q;drawPf();if((S.rngM||'1d')===rg)drawVeqt();}}).catch(function(){});}
@@ -775,15 +774,14 @@ function drawPf(){
    +'<div style="margin-top:6px;color:'+pctCol(pc)+'">'+pfSig(chg)+' '+pctTxt(pc)+'</div>'
    +rngBar(rg)+spark(c.map(function(x){return x*h.sh;}),pc)
    +'<div class="mst"><div><b>'+mny(cost,0)+'</b><span class="sub">Cost</span></div><div><b style="color:'+pctCol(ret)+'">'+pfSig(gain).replace(/\.\d\d$/,'')+'</b><span class="sub">Gain</span></div><div><b style="color:'+pctCol(ret)+'">'+(ret>=0?'+':'')+ret.toFixed(1)+'%</b><span class="sub">Return</span></div></div>'
-   +'<div class="sub" style="margin-top:14px">'+h.sh.toLocaleString('en-CA')+' shares at $'+h.avg.toFixed(2)+' avg. <span data-pf="edit" style="text-decoration:underline;cursor:pointer">Edit</span></div>';
+   +'<div class="sub" style="margin-top:14px">'+h.sh.toLocaleString('en-CA')+' shares at $'+h.avg.toFixed(2)+' avg.</div>';
 }
 $('pfOut').addEventListener('click',function(e){
   var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){S.rngP=r;save();drawPf();return;}
-  var a=e.target.getAttribute&&e.target.getAttribute('data-pf');if(!a)return;
-  if(a==='edit'){pfEdit=true;drawPf();}
-  else if(a==='cancel'){pfEdit=false;drawPf();}
-  else if(a==='save'){var sh=parseFloat($('pfSh').value),av=parseFloat($('pfAv').value);if(sh>0&&av>0){S.pf={sh:sh,avg:av};save();pfEdit=false;drawPf();}}
 });
+function pfIn(){var sh=parseFloat($('pfSh').value),av=parseFloat($('pfAv').value);if(sh>0&&av>0)S.pf={sh:sh,avg:av};else delete S.pf;save();drawPf();}
+if(S.pf){$('pfSh').value=S.pf.sh;$('pfAv').value=S.pf.avg;}
+$('pfSh').addEventListener('input',pfIn);$('pfAv').addEventListener('input',pfIn);
 drawPf();
 function futClosed(){
   try{var p={};new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',hour12:false}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value;});
