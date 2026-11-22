@@ -350,6 +350,11 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div id="fgOut"></div>
 </section>
 
+<section class="card" id="pfCard">
+  <h2>Portfolio</h2>
+  <div id="pfOut"></div>
+</section>
+
 <section class="card">
   <h2>Stocks</h2>
   <div class="row"><input type="text" id="stkIn" placeholder="Company or ticker" autocapitalize="characters" autocomplete="off" style="flex:1 1 0;min-width:0"><button class="sm" id="stkGo">Search</button></div>
@@ -440,7 +445,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 155</div>
+  <div class="sub" style="margin-top:12px">build 156</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -752,6 +757,34 @@ function drawVeqt(){
   $('mkVeqt').innerHTML='<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="sub">VEQT</span><span style="font:400 28px NDot,monospace">$'+v.p.toFixed(2)+' '+pctTxt(pct)+'</span></div>'+rngBar(rg)+spark(c,pct);
 }
 $('mkVeqt').addEventListener('click',function(e){var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){S.rngM=r;save();drawVeqt();}});
+
+var pfEdit=false;
+function mny(x,d){var a=Math.abs(x).toLocaleString('en-CA',{minimumFractionDigits:d,maximumFractionDigits:d});return (x<0?'-':'')+'$'+a;}
+function pfSig(x){return (x>=0?'+':'-')+mny(Math.abs(x),2);}
+function drawPf(){
+  var o=$('pfOut');if(!o)return;var h=S.pf;
+  if(!h||!(h.sh>0)||!(h.avg>0)||pfEdit){
+    o.innerHTML='<div class="sub">VEQT holding, stored only on this phone.</div><div class="row"><label>Shares<input type="number" inputmode="decimal" id="pfSh" value="'+(h&&h.sh||'')+'"></label><label>Avg cost ($)<input type="number" inputmode="decimal" id="pfAv" value="'+(h&&h.avg||'')+'"></label></div><div style="display:flex;gap:8px;margin-top:12px"><button type="button" class="sm" data-pf="save">Save</button>'+(h&&h.sh>0?'<button type="button" class="ghost sm" data-pf="cancel">Cancel</button>':'')+'</div>';return;
+  }
+  var v=mkV;if(!v){o.innerHTML='<div class="sub">Waiting for the VEQT price.</div>';return;}
+  var rg=S.rngP||'1d',c=rg==='1d'?v.c:(mkVRL[rg]||mkVR[rg]||[]);
+  if(rg!=='1d'&&!mkVRL[rg]&&(S.proxy||'')&&!mkVRT[rg]){mkVRT[rg]=1;stkChart('VEQT.TO',rg).then(function(j){var q=(j.chart.result[0].indicators.quote[0].close||[]).filter(function(x){return x!=null;});if(q.length>1){mkVRL[rg]=q;drawPf();if((S.rngM||'1d')===rg)drawVeqt();}}).catch(function(){});}
+  var val=h.sh*v.p,cost=h.sh*h.avg,gain=val-cost,ret=gain/cost*100;
+  var pc=rg==='1d'?v.pct:rngPct(c,v.pct),chg=rg==='1d'?h.sh*(v.p-v.pc):(c.length>1?h.sh*(c[c.length-1]-c[0]):h.sh*v.p*pc/100/(1+pc/100));
+  o.innerHTML='<div class="sub">Total value</div><div style="font:400 40px/1.1 NDot,monospace;margin-top:4px">'+mny(val,2)+'</div>'
+   +'<div style="margin-top:6px;color:'+pctCol(pc)+'">'+pfSig(chg)+' '+pctTxt(pc)+'</div>'
+   +rngBar(rg)+spark(c.map(function(x){return x*h.sh;}),pc)
+   +'<div class="mst"><div><b>'+mny(cost,0)+'</b><span class="sub">Cost</span></div><div><b style="color:'+pctCol(ret)+'">'+pfSig(gain).replace(/\.\d\d$/,'')+'</b><span class="sub">Gain</span></div><div><b style="color:'+pctCol(ret)+'">'+(ret>=0?'+':'')+ret.toFixed(1)+'%</b><span class="sub">Return</span></div></div>'
+   +'<div class="sub" style="margin-top:14px">'+h.sh.toLocaleString('en-CA')+' shares at $'+h.avg.toFixed(2)+' avg. <span data-pf="edit" style="text-decoration:underline;cursor:pointer">Edit</span></div>';
+}
+$('pfOut').addEventListener('click',function(e){
+  var r=e.target.getAttribute&&e.target.getAttribute('data-r');if(r){S.rngP=r;save();drawPf();return;}
+  var a=e.target.getAttribute&&e.target.getAttribute('data-pf');if(!a)return;
+  if(a==='edit'){pfEdit=true;drawPf();}
+  else if(a==='cancel'){pfEdit=false;drawPf();}
+  else if(a==='save'){var sh=parseFloat($('pfSh').value),av=parseFloat($('pfAv').value);if(sh>0&&av>0){S.pf={sh:sh,avg:av};save();pfEdit=false;drawPf();}}
+});
+drawPf();
 function futClosed(){
   try{var p={};new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',hour12:false}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value;});
   var h=+p.hour%24,w=p.weekday;return w==='Sat'||(w==='Fri'&&h>=17)||(w==='Sun'&&h<18);}catch(e){return false;}
@@ -764,7 +797,7 @@ function loadMarkets(){
     $('mkNews').innerHTML=nw?'<div class="sub" style="margin-bottom:6px">Market news</div>'+nw:'';
     $('gNews').innerHTML=newsHtml(o.gnews)||'<div class="sub">News unavailable.</div>';
     if(!r[0]&&!r[1]&&!r[2]&&!r[3]){$('mkVeqt').innerHTML='<div class="sub">Live numbers did not load.</div>';return;}
-    mkV=r[0];mkVR=o.vr||{};mkVRL={};mkVRT={};try{['1d','5d','1mo','1y','5y'].forEach(function(x){delete stkC['VEQT.TO|'+x];});}catch(e){}drawVeqt();
+    mkV=r[0];mkVR=o.vr||{};mkVRL={};mkVRT={};try{['1d','5d','1mo','1y','5y'].forEach(function(x){delete stkC['VEQT.TO|'+x];});}catch(e){}drawVeqt();drawPf();
     var h='',sum=0,n=0;
     for(var i=1;i<4;i++){var d=r[i];h+='<div style="display:flex;justify-content:space-between;margin-top:10px"><span class="sub">'+syms[i][1]+' futures</span><span style="font:400 22px NDot,monospace">'+(d?pctTxt(d.pct):'n/a')+'</span></div>';if(d){sum+=d.pct;n++;}}
     $('mkFut').innerHTML=h;
