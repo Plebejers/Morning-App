@@ -124,7 +124,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #tabwrap .tpad{padding:calc(10px + env(safe-area-inset-top)) 0 8px}
 #tabwrap .tpad>#tabs{position:relative}
 #tabs{position:relative;display:flex;margin:0 auto;width:min(calc(100% - 16px),504px);background:var(--card);border:1px solid color-mix(in srgb,var(--tx) 9%,transparent);border-radius:999px;padding:4px;flex:0 0 auto}
-#tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 12px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
+#tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 11px 'Space Mono',monospace;letter-spacing:.03em;white-space:nowrap;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
 #tabs .tab.on{color:var(--bg)}
 #pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/5);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;position:relative;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}
@@ -447,7 +447,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 158</div>
+  <div class="sub" style="margin-top:12px">build 159</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
