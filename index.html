@@ -44,7 +44,7 @@ input[type=checkbox]{width:26px;height:26px;margin:0;accent-color:var(--ac);bord
 button,.btn{display:block;width:100%;text-align:center;text-decoration:none;background:var(--tx);color:var(--bg);border:0;border-radius:999px;padding:14px;font:700 13px 'Space Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:12px;cursor:pointer}
 .btn.red{background:var(--tx);color:var(--bg)}
 button.ghost,.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--tx)}
-button.sm{display:inline-block;width:auto;padding:10px 16px;font-size:12px;margin:0}
+button.sm{display:inline-block;width:auto;padding:10px 16px;min-height:44px;font-size:12px;margin:0}
 .late,.soon{color:var(--tx);font-weight:700}.good{color:var(--mu)}
 ul{list-style:none;margin:0;padding:0}
 li.step{cursor:pointer;display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px dotted var(--line)}
@@ -108,7 +108,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .mst b{display:block;font:400 22px/1 'NDot','Doto',monospace}
 .mst span{font-size:11px}
 .rng{display:flex;gap:6px;margin-top:10px}
-.rng button{margin:0;width:auto;padding:3px 9px 4px;background:transparent;color:var(--tx);border:1px solid var(--line);font:400 16px/1.05 'NDot','Doto',monospace;letter-spacing:0;text-transform:none}
+.rng button{margin:0;width:auto;min-height:40px;padding:3px 12px 4px;background:transparent;color:var(--tx);border:1px solid var(--line);font:400 16px/1.05 'NDot','Doto',monospace;letter-spacing:0;text-transform:none}
 .rng button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
 .rt{margin-top:14px;border-top:1px dotted var(--line)}
 .rt .r{display:flex;gap:12px;padding:9px 0;border-bottom:1px dotted var(--line);font-size:14px;line-height:1.35}
@@ -188,7 +188,7 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 :root[data-theme="blue"]{--bg:#07142b;--card:#0e1f3f;--card2:#162c54;--line:#253f6b;--tx:#e7effd;--mu:#8ea5cc;--dim:#253f6b;color-scheme:dark}
 body,.card,#tabs{transition:background-color .3s ease,color .3s ease}
 #thm,.thm2{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
-.thm2 .th,#thm .th{display:inline-flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;border-radius:999px;border:1.5px solid var(--line);font:700 12px 'Space Mono',monospace;cursor:pointer;color:var(--tx);-webkit-tap-highlight-color:transparent}
+.thm2 .th,#thm .th{min-height:44px;display:inline-flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;border-radius:999px;border:1.5px solid var(--line);font:700 12px 'Space Mono',monospace;cursor:pointer;color:var(--tx);-webkit-tap-highlight-color:transparent}
 .thm2 .th i,#thm .th i{width:18px;height:18px;border-radius:50%;display:block;border:1px solid rgba(128,128,128,.4)}
 .thm2 .th.on,#thm .th.on{border-color:var(--tx)}
 
@@ -440,7 +440,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 151</div>
+  <div class="sub" style="margin-top:12px">build 152</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -1228,7 +1228,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     if(!down||e.pointerId!==pid)return;
     var dx=e.clientX-sx,dy=e.clientY-sy;
     if(lock===null){
-      if(Math.abs(dx)<6&&Math.abs(dy)<6)return;
+      if(Math.abs(dx)<12&&Math.abs(dy)<12)return;
       lock=Math.abs(dx)>Math.abs(dy)*1.1?'x':'y';
       if(lock==='x'){try{pager.setPointerCapture(pid);}catch(_){}showBar();}
     }
