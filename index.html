@@ -285,7 +285,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <div id="clock" class="hide">--:--</div>
 
 <div id="ptr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
-<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Mood</div><div class="tab" data-i="3">Reading</div><div class="tab" data-i="4">Notes</div></nav></div></div></div>
+<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Mood</div><div class="tab" data-i="3">Reading</div><div class="tab" data-i="4">Settings</div></nav></div></div></div>
 <div id="pager">
 <div class="pg"><div class="in">
 <button type="button" class="ghost" id="mdNudge" style="display:none;margin-bottom:12px">Log today's mood</button>
@@ -397,6 +397,11 @@ html:not(.boot) body{animation:bootin .32s ease}
   <h2>Saved</h2>
   <div id="mqSaved"></div>
 </section>
+
+<section class="card">
+  <h2>Notes</h2>
+  <textarea id="notes" rows="5" placeholder="Write something..."></textarea>
+</section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div>
 </div></div>
 <div class="pg"><div class="in">
@@ -410,11 +415,6 @@ html:not(.boot) body{animation:bootin .32s ease}
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 <div class="pg"><div class="in">
-<section class="card">
-  <h2>Notes</h2>
-  <textarea id="notes" rows="5" placeholder="Write something..."></textarea>
-</section>
-
 <section class="card" id="setupCard">
   <h2>Setup</h2>
   <div class="sub" style="margin-bottom:8px">Style</div>
@@ -447,7 +447,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 157</div>
+  <div class="sub" style="margin-top:12px">build 158</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
