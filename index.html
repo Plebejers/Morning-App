@@ -361,7 +361,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub" style="margin:16px 0 8px">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 145</div>
+  <div class="sub" style="margin-top:12px">build 146</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -689,7 +689,7 @@ function loadMarkets(){
     var h='',sum=0,n=0;
     for(var i=1;i<4;i++){var d=r[i];h+='<div style="display:flex;justify-content:space-between;margin-top:10px"><span class="sub">'+syms[i][1]+' futures</span><span style="font:400 22px NDot,monospace">'+(d?pctTxt(d.pct):'n/a')+'</span></div>';if(d){sum+=d.pct;n++;}}
     $('mkFut').innerHTML=h;
-    var up=o.t?' Updated '+new Date(o.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'.':'';
+    var up=o.t?' Updated '+new Date(o.t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false})+'.':'';
     if(n){var a=sum/n;$('mkSum').textContent=futClosed()?'US futures are closed until Sunday 18:00 ET. Showing the last session: '+pctTxt(a)+' avg.'+up:'US futures: '+(Math.abs(a)<0.15?'flat':a>0?'pointing higher':'pointing lower')+' ('+pctTxt(a)+' avg).'+up;}
   });
 }
