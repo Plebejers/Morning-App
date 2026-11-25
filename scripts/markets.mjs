@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-const syms=['VEQT.TO','ES=F','NQ=F','YM=F'];
+const syms=['VEQT.TO','ES=F','NQ=F','YM=F','VUN.TO','VCN.TO','VIU.TO','VEE.TO'];
 const out={t:new Date().toISOString()};
 for(const s of syms){
   for(const host of ['query1','query2']){
