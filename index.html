@@ -449,7 +449,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub slb">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 163</div>
+  <div class="sub" style="margin-top:12px">build 164</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -817,7 +817,7 @@ function rcDraw(){
     var ex=new Date();if(ex.getHours()<19)ex.setDate(ex.getDate()-1);while(ex.getDay()===0||ex.getDay()===6)ex.setDate(ex.getDate()-1);
     var stale=j.d&&j.d<dk(ex);
     $('rcOut').innerHTML='<div class="sub">Close of '+esc(lbl)+'</div>'+(stale?'<div class="sub" style="margin-top:4px;color:#e8742c">Newer recap has not arrived yet.</div>':'')+'<div style="margin-top:8px;line-height:1.5">'+lead+esc(j.text)+'</div>'
-      +(j.veqt?'<div class="st">For VEQT</div>'+(Array.isArray(j.veqt)?j.veqt.map(function(v){var q=slP(v);return '<div style="margin-top:10px;line-height:1.5"><b>'+esc(v.n)+'</b> <b style="color:'+(Math.abs(q.p)<0.05?'inherit':q.p>0?'#1fb85a':'#e5392e')+'">'+(q.p>=0.05?'+':'')+q.p.toFixed(2)+'%</b> <span class="sub">'+esc(q.r)+'</span><br>'+esc(v.t)+'</div>';}).join(''):'<div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>'):'');
+      +(j.veqt?'<div class="st">For VEQT</div>'+(Array.isArray(j.veqt)?j.veqt.map(function(v){var q=slP(v);return '<div style="margin-top:10px;line-height:1.5"><b>'+esc(v.n)+'</b> <b style="color:'+(Math.abs(q.p)<0.05?'inherit':q.p>0?'#1fb85a':'#e5392e')+'">'+(q.p>=0.05?'+':'')+q.p.toFixed(2)+'%</b><br>'+esc(v.t)+'</div>';}).join(''):'<div style="margin-top:8px;line-height:1.5">'+esc(j.veqt)+'</div>'):'');
 }
 
 var MQ=[
