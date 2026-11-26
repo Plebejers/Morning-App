@@ -126,13 +126,15 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 #tabwrap .tpad{padding:calc(10px + env(safe-area-inset-top)) 0 8px}
 #tabwrap .tpad>#tabs{position:relative}
 #tabs{position:relative;display:flex;margin:0 auto;width:min(calc(100% - 16px),504px);background:var(--card);border:1px solid color-mix(in srgb,var(--tx) 9%,transparent);border-radius:999px;padding:4px;flex:0 0 auto}
-#tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 11px 'Space Mono',monospace;letter-spacing:.03em;white-space:nowrap;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
+#tabs .tab{position:relative;z-index:1;flex:1;text-align:center;padding:10px 0;font:700 10px 'Space Mono',monospace;letter-spacing:.02em;white-space:nowrap;text-transform:uppercase;color:var(--mu);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:color .18s ease}
 #tabs .tab.on{color:var(--bg)}
-#pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/5);background:var(--tx);border-radius:999px;will-change:transform}
+#pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/6);background:var(--tx);border-radius:999px;will-change:transform}
 #pager{flex:1 1 0;min-height:0;position:relative;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}
 .pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;visibility:visible;will-change:transform;transform:translate3d(100%,0,0);contain:layout style;padding:calc(var(--th,76px) + 4px) 8px calc(88px + env(safe-area-inset-bottom));-webkit-user-select:auto;user-select:auto}
 .pg::-webkit-scrollbar{display:none;width:0;height:0}
 .pg .in{max-width:560px;margin:0 auto}
+.pg.pgGame{padding:calc(var(--th,76px)) 0 0;overflow:hidden}
+#gameFrame{display:block;width:100%;height:100%;border:0;background:var(--bg)}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 
 #rdBar{display:flex;gap:8px}
@@ -227,7 +229,7 @@ body,.card,#tabs{transition:background-color .3s ease,color .3s ease}
 :root[data-style="ios"] #tabs{border:0;border-radius:11px;padding:3px;background:color-mix(in srgb,var(--card) 72%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
 :root[data-style="ios"] #tabs .tab{font-size:12px;font-weight:600;padding:9px 0}
 :root[data-style="ios"] #tabs .tab.on{color:var(--iost)}
-:root[data-style="ios"] #pill{background:var(--ios);border-radius:9px;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/5)}
+:root[data-style="ios"] #pill{background:var(--ios);border-radius:9px;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/6)}
 :root[data-style="ios"] .alert{background:var(--ios);color:var(--iost);border-radius:12px}
 :root[data-style="ios"] li.step{border-bottom:1px solid var(--line)}
 /* Material You style */
@@ -287,7 +289,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <div id="clock" class="hide">--:--</div>
 
 <div id="ptr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
-<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Mood</div><div class="tab" data-i="3">Reading</div><div class="tab" data-i="4">Settings</div></nav></div></div></div>
+<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Mood</div><div class="tab" data-i="3">Reading</div><div class="tab" data-i="4">Game</div><div class="tab" data-i="5">Settings</div></nav></div></div></div>
 <div id="pager">
 <div class="pg"><div class="in">
 <button type="button" class="ghost" id="mdNudge" style="display:none;margin-bottom:12px">Log today's mood</button>
@@ -416,6 +418,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div id="rdNav"></div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
+<div class="pg pgGame"><iframe id="gameFrame" title="Touchline" loading="lazy"></iframe></div>
 <div class="pg"><div class="in">
 <section class="card" id="setupCard">
   <h2 style="margin-bottom:20px">Setup</h2>
@@ -446,12 +449,10 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="row"><label style="flex:1">Stock proxy URL<input type="text" id="proxy" placeholder="https://xxxx.workers.dev"></label></div>
   <div class="sub slb">Portfolio (VEQT)</div>
   <div class="row"><label>Shares<input type="number" inputmode="decimal" id="pfSh"></label><label>Avg cost ($)<input type="number" inputmode="decimal" id="pfAv"></label></div>
-  <div class="sub slb">Game</div>
-  <a href="touchline.html" class="btn ghost" style="display:block;text-align:center;text-decoration:none">Play Touchline</a>
   <div class="sub slb">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 165</div>
+  <div class="sub" style="margin-top:12px">build 166</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -1243,7 +1244,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     }
     pill.style.transform='translateX('+(pos*100).toFixed(2)+'%)';
     var ci=idx();
-    if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});save();}
+    if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});save();var gf=document.getElementById('gameFrame');if(gf&&pgs[ci]===gf.parentNode&&!gf.getAttribute('src'))gf.setAttribute('src','touchline.html?embed=1');}
   }
   function save(){try{sessionStorage.setItem(PK,String(idx()));}catch(e){}}
   function ease(t){return 1-Math.pow(1-t,4);}
@@ -1304,6 +1305,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   window.addEventListener('pagehide',save);
   render();
   window.__pager={goto:goto,get pos(){return pos;}};
+  window.addEventListener('message',function(e){if(e.origin!==location.origin||!e.data||e.data.tl!=='swipe')return;goto(idx()+(e.data.d>0?1:-1));});
 })();
 (function(){
   var done=false;

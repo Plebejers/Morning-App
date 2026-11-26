@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#000000">
 <title>Touchline</title>
 <link rel="icon" href="icon.svg">
+<script>if(/[?&]embed/.test(location.search))document.documentElement.className='em';</script>
 <style>
 @font-face{font-family:'NDot';src:url(fonts/ndot.otf) format('opentype');font-display:swap}
 @font-face{font-family:'Space Grotesk';src:url(fonts/spacegrotesk.woff) format('woff');font-weight:400 600;font-display:swap}
@@ -22,15 +23,15 @@ button{font:inherit;color:inherit;cursor:pointer}
 #top h1{font-size:26px}
 nav{position:relative;display:flex;border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:12px;background:var(--bg)}
 nav button{flex:1;border:0;background:none;padding:10px 0;border-radius:999px;font:700 11px 'Space Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--mu)}
-nav button.on{background:var(--tx);color:#000}
+nav button.on{background:var(--tx);color:var(--bg)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:12px}
 h2{font-size:32px;line-height:1.05;margin-bottom:10px}
 .sub{font:400 12px/1.5 'Space Mono',monospace;color:var(--mu)}
 .lbl{font:400 10px 'Space Mono',monospace;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin:16px 0 8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{border:1px solid var(--line);border-radius:999px;padding:0 14px;min-height:42px;font:700 12px 'Space Mono',monospace;background:none}
-.chip.on{background:var(--tx);color:#000;border-color:var(--tx)}
-.btn{display:block;width:100%;border:0;border-radius:999px;padding:16px;background:var(--tx);color:#000;font:700 13px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-top:14px}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.btn{display:block;width:100%;border:0;border-radius:999px;padding:16px;background:var(--tx);color:var(--bg);font:700 13px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-top:14px}
 .btn.gh{background:none;color:var(--tx);border:1px solid var(--line)}
 .btn:disabled{opacity:.35}
 .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:16px;padding:14px 16px;background:none;margin-top:8px}
@@ -58,6 +59,8 @@ tr.dn td:first-child{color:var(--red)}
 .msg:first-child{border-top:0}
 input[type=text]{width:100%;height:48px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--tx);padding:0 14px;font:inherit;font-size:16px}
 .pitch{display:block;margin:4px auto 0;width:150px}
+.em #top{display:none}
+.em body{padding-top:4px}
 .g{color:var(--grn)}.r{color:var(--red)}.o{color:var(--org)}
 </style>
 </head>
@@ -322,8 +325,8 @@ function newSeason(){
 
 /* views */
 function pitch(sh){
-  var rows=ROWS[sh],h=150,w=104,out='<svg class="pitch" viewBox="0 0 '+w+' '+h+'"><rect x="2" y="2" width="'+(w-4)+'" height="'+(h-4)+'" rx="4" fill="none" stroke="#2a2a2a"/><line x1="2" y1="'+h/2+'" x2="'+(w-2)+'" y2="'+h/2+'" stroke="#2a2a2a"/><circle cx="'+w/2+'" cy="'+h/2+'" r="12" fill="none" stroke="#2a2a2a"/>';
-  rows.forEach(function(n,ri_){var y=h-12-ri_*((h-24)/(rows.length-1));for(var i=0;i<n;i++){var x=w/(n+1)*(i+1);out+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4.2" fill="#fff"/>';}});
+  var rows=ROWS[sh],h=150,w=104,out='<svg class="pitch" viewBox="0 0 '+w+' '+h+'"><rect x="2" y="2" width="'+(w-4)+'" height="'+(h-4)+'" rx="4" fill="none" style="stroke:var(--line)"/><line x1="2" y1="'+h/2+'" x2="'+(w-2)+'" y2="'+h/2+'" style="stroke:var(--line)"/><circle cx="'+w/2+'" cy="'+h/2+'" r="12" fill="none" style="stroke:var(--line)"/>';
+  rows.forEach(function(n,ri_){var y=h-12-ri_*((h-24)/(rows.length-1));for(var i=0;i<n;i++){var x=w/(n+1)*(i+1);out+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4.2" style="fill:var(--tx)"/>';}});
   return out+'</svg>';
 }
 function boardBars(){
@@ -375,7 +378,7 @@ function preView(){
     +pitch(G.sh)
     +'<div class="lbl">Approach</div><div class="chips">'+Object.keys(APN).map(function(k){return '<button class="chip'+(G.ap===k?' on':'')+'" data-a="ap" data-k="'+k+'">'+APN[k]+'</button>';}).join('')+'</div>'
     +'<div class="sub" style="margin-top:8px">'+(G.ap==='press'?'Pressing tires your players fastest.':G.ap==='low'?'Fewer goals both ways. Easiest on the legs.':'The middle ground.')+'</div>';
-  if(L.g){var ov=G.gam&&L.over?L.over:null;h+='<div class="lbl">Gamble</div><button class="opt" data-a="gam" style="'+(G.gam?'border-color:#fff':'')+'"><b>'+(G.gam?'✓ ':'')+'Start '+esc(L.g.n)+'</b><span>'+L.g.age+', '+PN[L.g.pos]+', potential '+potStars(L.g)+(ov?'. Ahead of '+esc(ov.n)+'.':'. Tap to start him.')+'</span></button>';}
+  if(L.g){var ov=G.gam&&L.over?L.over:null;h+='<div class="lbl">Gamble</div><button class="opt" data-a="gam" style="'+(G.gam?'border-color:var(--tx)':'')+'"><b>'+(G.gam?'✓ ':'')+'Start '+esc(L.g.n)+'</b><span>'+L.g.age+', '+PN[L.g.pos]+', potential '+potStars(L.g)+(ov?'. Ahead of '+esc(ov.n)+'.':'. Tap to start him.')+'</span></button>';}
   h+='<div class="lbl">Starting XI</div><div class="sub" style="line-height:1.8">'+L.xi.map(function(p){return esc(p.n)+(p.ft<60?' <span class="o">'+Math.round(p.ft)+'%</span>':'');}).join(', ')+'</div>';
   h+='<button class="btn" data-a="ko"'+(G.ev&&G.ev.ch?' disabled':'')+'>Kick off</button></div>';
   h+='<div class="card"><div class="lbl" style="margin-top:0">Inbox</div>'+G.inbox.slice(0,6).map(function(m){return '<div class="msg">'+esc(m.t)+'</div>';}).join('')+'</div>';
@@ -442,6 +445,11 @@ $('app').addEventListener('click',function(e){
   save();render();
 });
 load();render();
+if(document.documentElement.className==='em'&&window.parent!==window){
+  var syncT=function(){try{var pr=window.parent.document.documentElement,cs=window.parent.getComputedStyle(pr),r=document.documentElement.style;['--bg','--card','--card2','--line','--tx','--mu'].forEach(function(v){var x=cs.getPropertyValue(v).trim();if(x)r.setProperty(v,x);});}catch(e){}};
+  syncT();try{new MutationObserver(syncT).observe(window.parent.document.documentElement,{attributes:true});window.parent.matchMedia('(prefers-color-scheme: light)').addEventListener('change',syncT);}catch(e){}var sx=0,sy=0,st=0;
+  document.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();},{passive:true});
+  document.addEventListener('touchend',function(e){var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&Date.now()-st<700)window.parent.postMessage({tl:'swipe',d:dx<0?1:-1},location.origin);},{passive:true});}
 window.__tl={reset:function(){G=null;},get:function(){return G;},auto:function(n,smart){for(var k=0;k<n;k++){if(!G)newGame('Test FC');if(G.phase==='eos'){if(G.eos.sacked){newGame('Test FC');continue;}newSeason();continue;}if(G.phase==='ft'){G.phase='pre';}if(G.ev&&G.ev.ch)evChoice(ri(0,1));if(smart){var op=G.tm[oppNow().i];var bs=-99;Object.keys(SHN).forEach(function(sh){Object.keys(APN).forEach(function(ap){var v=AP[ap][op.st]+(SH[sh][op.st]||0)-(ap==='press'?1.5:0);if(v>bs){bs=v;G.sh=sh;G.ap=ap;}});});}else{G.sh=pick(Object.keys(SHN));G.ap=pick(Object.keys(APN));}G.gam=Math.random()<0.3;kickoff();e30(ri(0,2));e70(0);}}};
 })();
 </script>
