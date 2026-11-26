@@ -8,6 +8,9 @@
 <link rel="icon" href="icon.svg">
 <script>if(/[?&]embed/.test(location.search))document.documentElement.className='em';</script>
 <style>
+@font-face{font-family:'Inter';src:url(fonts/inter-400.woff) format('woff');font-weight:400;font-display:swap}
+@font-face{font-family:'Inter';src:url(fonts/inter-700.woff) format('woff');font-weight:700;font-display:swap}
+@font-face{font-family:'Google Sans Flex';src:url(fonts/googlesansflex.woff) format('woff');font-weight:400 600;font-display:swap}
 @font-face{font-family:'NDot';src:url(fonts/ndot.otf) format('opentype');font-display:swap}
 @font-face{font-family:'Space Grotesk';src:url(fonts/spacegrotesk.woff) format('woff');font-weight:400 600;font-display:swap}
 @font-face{font-family:'Space Mono';src:url(fonts/spacemono-400.woff) format('woff');font-weight:400;font-display:swap}
@@ -60,6 +63,13 @@ tr.dn td:first-child{color:var(--red)}
 input[type=text]{width:100%;height:48px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--tx);padding:0 14px;font:inherit;font-size:16px}
 .pitch{display:block;margin:4px auto 0;width:150px}
 .em #top{display:none}
+.sty body,.sty .sub,.sty .lbl,.sty .chip,.sty .btn,.sty nav button,.sty table,.sty .ev,.sty .tag,.sty .opt span{font-family:var(--ff)!important;letter-spacing:0}
+.sty .nd,.sty h1,.sty h2,.sty .big,.sty .ovr{font-family:var(--ff);font-weight:700;letter-spacing:-.02em}
+.sty .lbl,.sty .btn,.sty nav button{text-transform:none}
+.sty .lbl{font-size:12px}.sty .btn{font-size:16px}.sty .chip{font-size:14px;font-weight:600}
+.sty .btn,.sty .chip.on,.sty nav button.on{background:var(--acc);color:var(--acct);border-color:var(--acc)}
+.s-ios .card{border:0;border-radius:14px}.s-ios .chip,.s-ios .opt{border-radius:10px}.s-ios .btn{border-radius:12px}
+.s-material .card{border:0;border-radius:28px}.s-material .opt{border-radius:16px}
 .em body{padding-top:4px}
 .g{color:var(--grn)}.r{color:var(--red)}.o{color:var(--org)}
 </style>
@@ -445,8 +455,11 @@ $('app').addEventListener('click',function(e){
   save();render();
 });
 load();render();
-if(document.documentElement.className==='em'&&window.parent!==window){
-  var syncT=function(){try{var pr=window.parent.document.documentElement,cs=window.parent.getComputedStyle(pr),r=document.documentElement.style;['--bg','--card','--card2','--line','--tx','--mu'].forEach(function(v){var x=cs.getPropertyValue(v).trim();if(x)r.setProperty(v,x);});}catch(e){}};
+if(/(^| )em( |$)/.test(document.documentElement.className)&&window.parent!==window){
+  var syncT=function(){try{var pr=window.parent.document.documentElement,cs=window.parent.getComputedStyle(pr),r=document.documentElement.style;['--bg','--card','--card2','--line','--tx','--mu'].forEach(function(v){var x=cs.getPropertyValue(v).trim();if(x)r.setProperty(v,x);});
+    var sty=pr.getAttribute('data-style')||'',de=document.documentElement;de.className='em'+(sty?' sty s-'+sty:'');
+    if(sty==='ios'){r.setProperty('--ff',"Inter,-apple-system,system-ui,sans-serif");r.setProperty('--acc',cs.getPropertyValue('--ios').trim());r.setProperty('--acct',cs.getPropertyValue('--iost').trim());}
+    else if(sty==='material'){r.setProperty('--ff',"'Google Sans Flex',Roboto,system-ui,sans-serif");r.setProperty('--acc',cs.getPropertyValue('--mp').trim());r.setProperty('--acct',cs.getPropertyValue('--mpt').trim());}}catch(e){}};
   syncT();try{new MutationObserver(syncT).observe(window.parent.document.documentElement,{attributes:true});window.parent.matchMedia('(prefers-color-scheme: light)').addEventListener('change',syncT);}catch(e){}var sx=0,sy=0,st=0;
   var lk=null,P=function(m){window.parent.postMessage(m,location.origin);};
   document.addEventListener('touchstart',function(e){if(e.touches.length>1)return;var t=e.touches[0];sx=t.clientX;sy=t.clientY;lk=null;},{passive:true});

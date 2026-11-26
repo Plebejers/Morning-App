@@ -442,10 +442,10 @@ html:not(.boot) body{animation:bootin .32s ease}
     <label>Buffer<input type="number" id="buffer" min="0" inputmode="numeric"></label>
   </div>
   <div class="row">
-    <label style="flex:1">Home<input type="text" id="home" placeholder="Enter your home address"></label>
+    <label style="flex:1">Home<input type="text" id="home" placeholder="Home address"></label>
   </div>
   <div class="row">
-    <label style="flex:2">Work<input type="text" id="work" placeholder="Enter your work address"></label>
+    <label style="flex:2">Work<input type="text" id="work" placeholder="Work address"></label>
     <label>Mode<select id="mode"><option value="driving">Drive</option><option value="transit">Transit</option><option value="bicycling">Bike</option><option value="walking">Walk</option></select></label>
   </div>
   <div class="row">
@@ -459,7 +459,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub slb">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 169</div>
+  <div class="sub" style="margin-top:12px">build 170</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -886,7 +886,7 @@ function drawMood(){
      +'<div><b>'+(dl===null||Math.abs(dl)<0.15?'=':dl>0?'+'+dl.toFixed(1):dl.toFixed(1))+'</b><span class="sub">vs before</span></div>'
      +'<div><b>'+n+'</b><span class="sub">Days logged</span></div><div><b>'+st+'</b><span class="sub">Streak</span></div></div>';
     var all=Object.keys(S.mood).map(function(k){return S.mood[k];}).filter(function(x){return x&&x.m&&x.w;}),hv=all.filter(function(x){return x.w>=3;}),lt=all.filter(function(x){return x.w<=2;});
-    if(hv.length>=3&&lt.length>=3)h+='<div style="margin-top:14px;line-height:1.5">On heavy work days your mood averages <b>'+mAvg(hv).toFixed(1)+'</b>, against <b>'+mAvg(lt).toFixed(1)+'</b> on lighter days.</div>';
+    if(hv.length>=3&&lt.length>=3){var ah=mAvg(hv),al=mAvg(lt);h+='<div style="margin-top:14px;line-height:1.5">'+(Math.abs(ah-al)<0.15?'Work load and mood do not seem linked so far: about <b>'+ah.toFixed(1)+'</b> on heavy and lighter days.':'On heavy work days your mood averages <b>'+ah.toFixed(1)+'</b>, against <b>'+al.toFixed(1)+'</b> on lighter days.')+'</div>';}
   }else h='<div class="sub" style="margin-top:14px">Log a day to start the overview.</div>';
   $('mdSt').innerHTML=h;
   var wd=[[],[],[],[],[],[],[]],WN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],tot=0;

@@ -1,4 +1,4 @@
-var C='commute-v6',F=['./','index.html','manifest.json','icon.svg','fonts/literata.woff','fonts/literata-italic.woff','fonts/spacegrotesk.woff','fonts/spacemono-400.woff','fonts/spacemono-700.woff','fonts/doto.woff'];
+var C='commute-v7',F=['./','index.html','manifest.json','icon.svg','touchline.html','quotes.json','fonts/ndot.otf','fonts/literata.woff','fonts/literata-italic.woff','fonts/spacegrotesk.woff','fonts/spacemono-400.woff','fonts/spacemono-700.woff','fonts/doto.woff'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(F);}));self.skipWaiting();});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==C;}).map(function(n){return caches.delete(n);}));}).then(function(){return self.clients.claim();}));});
 self.addEventListener('fetch',function(e){
