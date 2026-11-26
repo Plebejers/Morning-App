@@ -448,8 +448,13 @@ load();render();
 if(document.documentElement.className==='em'&&window.parent!==window){
   var syncT=function(){try{var pr=window.parent.document.documentElement,cs=window.parent.getComputedStyle(pr),r=document.documentElement.style;['--bg','--card','--card2','--line','--tx','--mu'].forEach(function(v){var x=cs.getPropertyValue(v).trim();if(x)r.setProperty(v,x);});}catch(e){}};
   syncT();try{new MutationObserver(syncT).observe(window.parent.document.documentElement,{attributes:true});window.parent.matchMedia('(prefers-color-scheme: light)').addEventListener('change',syncT);}catch(e){}var sx=0,sy=0,st=0;
-  document.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();},{passive:true});
-  document.addEventListener('touchend',function(e){var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&Date.now()-st<700)window.parent.postMessage({tl:'swipe',d:dx<0?1:-1},location.origin);},{passive:true});}
+  var lk=null,P=function(m){window.parent.postMessage(m,location.origin);};
+  document.addEventListener('touchstart',function(e){if(e.touches.length>1)return;var t=e.touches[0];sx=t.clientX;sy=t.clientY;lk=null;},{passive:true});
+  document.addEventListener('touchmove',function(e){var t=e.touches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+    if(lk===null){if(Math.abs(dx)<10&&Math.abs(dy)<10)return;lk=Math.abs(dx)>Math.abs(dy)*1.1?'x':'y';if(lk==='x')P({tl:'drag',ph:'s'});}
+    if(lk==='x'){e.preventDefault();P({tl:'drag',ph:'m',dx:dx});}},{passive:false});
+  document.addEventListener('touchend',function(){if(lk==='x')P({tl:'drag',ph:'e'});lk=null;},{passive:true});
+  document.addEventListener('touchcancel',function(){if(lk==='x')P({tl:'drag',ph:'e',c:1});lk=null;},{passive:true});}
 window.__tl={reset:function(){G=null;},get:function(){return G;},auto:function(n,smart){for(var k=0;k<n;k++){if(!G)newGame('Test FC');if(G.phase==='eos'){if(G.eos.sacked){newGame('Test FC');continue;}newSeason();continue;}if(G.phase==='ft'){G.phase='pre';}if(G.ev&&G.ev.ch)evChoice(ri(0,1));if(smart){var op=G.tm[oppNow().i];var bs=-99;Object.keys(SHN).forEach(function(sh){Object.keys(APN).forEach(function(ap){var v=AP[ap][op.st]+(SH[sh][op.st]||0)-(ap==='press'?1.5:0);if(v>bs){bs=v;G.sh=sh;G.ap=ap;}});});}else{G.sh=pick(Object.keys(SHN));G.ap=pick(Object.keys(APN));}G.gam=Math.random()<0.3;kickoff();e30(ri(0,2));e70(0);}}};
 })();
 </script>

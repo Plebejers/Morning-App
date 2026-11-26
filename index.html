@@ -136,6 +136,13 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 .pg.pgGame{padding:calc(var(--th,76px)) 0 0;overflow:hidden}
 #gameFrame{display:block;width:100%;height:100%;border:0;background:var(--bg)}
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
+/* carousel tab bar */
+#pill{display:none!important}
+#tclip{flex:1;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24%,#000 76%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 24%,#000 76%,transparent 100%)}
+#tstrip{display:flex;will-change:transform}
+#tabs #tstrip .tab{flex:0 0 112px;padding:12px 0;font-size:13px;letter-spacing:.06em;color:var(--tx)!important;transition:none}
+:root[data-style] #tabs #tstrip .tab{font-size:15px;letter-spacing:0;padding:11px 0}
+
 
 #rdBar{display:flex;gap:8px}
 #rdBar button{flex:1;padding:11px 8px;font-size:12px;margin:0}
@@ -289,7 +296,7 @@ html:not(.boot) body{animation:bootin .32s ease}
 <div id="clock" class="hide">--:--</div>
 
 <div id="ptr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div>
-<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Mood</div><div class="tab" data-i="3">Reading</div><div class="tab" data-i="4">Game</div><div class="tab" data-i="5">Settings</div></nav></div></div></div>
+<div id="tabwrap"><div class="tin"><div class="tpad"><nav id="tabs" aria-label="Pages"><div id="pill"></div><div id="tclip"><div id="tstrip"><div class="tab on" data-i="0">Commute</div><div class="tab" data-i="1">Markets</div><div class="tab" data-i="2">Mood</div><div class="tab" data-i="3">Reading</div><div class="tab" data-i="4">Game</div><div class="tab" data-i="5">Settings</div></div></div></nav></div></div></div>
 <div id="pager">
 <div class="pg"><div class="in">
 <button type="button" class="ghost" id="mdNudge" style="display:none;margin-bottom:12px">Log today's mood</button>
@@ -452,7 +459,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub slb">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 166</div>
+  <div class="sub" style="margin-top:12px">build 167</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -1226,7 +1233,8 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
 (function(){
   var pager=document.getElementById('pager'),pill=document.getElementById('pill'),tabs=[].slice.call(document.querySelectorAll('#tabs .tab')),pgs=[].slice.call(document.querySelectorAll('.pg'));
   var wrap=document.getElementById('tabwrap'),lastY=new WeakMap();
-  var N=pgs.length,pos=0,W=1,raf=0,lastCi=-1,PK='glance-page';
+  var N=pgs.length,pos=0,W=1,raf=0,lastCi=-1,PK='glance-page',strip=document.getElementById('tstrip'),clip=document.getElementById('tclip'),TW=112,CW=300;
+  function meas(){TW=tabs[0].offsetWidth||112;CW=clip.clientWidth||300;}
   function setTh(){var h=wrap.offsetHeight;if(h)document.documentElement.style.setProperty('--th',h+'px');}
   setTh();window.addEventListener('resize',setTh);window.addEventListener('load',setTh);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(setTh);
   function showBar(){if(wrap.classList.contains('off'))wrap.classList.remove('off');}
@@ -1242,7 +1250,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
       g.style.transform='translate3d('+tx.toFixed(1)+'px,0,0) scale('+(1-0.1*a).toFixed(4)+')';
       g.style.zIndex=a<0.5?2:1;
     }
-    pill.style.transform='translateX('+(pos*100).toFixed(2)+'%)';
+    if(strip){strip.style.transform='translate3d('+(CW/2-(pos+0.5)*TW).toFixed(1)+'px,0,0)';for(var q=0;q<N;q++){var dd=Math.abs(q-pos);tabs[q].style.opacity=(dd<1?1-0.62*dd:Math.max(0.15,0.38-0.2*(dd-1))).toFixed(3);}}
     var ci=idx();
     if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});save();var gf=document.getElementById('gameFrame');if(gf&&pgs[ci]===gf.parentNode&&!gf.getAttribute('src'))gf.setAttribute('src','touchline.html?embed=1');}
   }
@@ -1301,11 +1309,15 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
     },{passive:true});
   });
   try{var si=parseInt(sessionStorage.getItem(PK),10);if(si>0&&si<N)pos=si;}catch(e){}
-  window.addEventListener('resize',render);
+  window.addEventListener('resize',function(){meas();render();});window.addEventListener('load',function(){meas();render();});if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){meas();render();});meas();
   window.addEventListener('pagehide',save);
   render();
   window.__pager={goto:goto,get pos(){return pos;}};
-  window.addEventListener('message',function(e){if(e.origin!==location.origin||!e.data||e.data.tl!=='swipe')return;goto(idx()+(e.data.d>0?1:-1));});
+  window.addEventListener('message',function(e){if(e.origin!==location.origin||!e.data||e.data.tl!=='drag')return;var d=e.data,now=performance.now();
+    if(d.ph==='s'){cancelAnimationFrame(raf);cancelAnimationFrame(rq);rq=0;down=true;lock='x';sp=pos;pid=-1;smp=[{t:now,x:0}];showBar();}
+    else if(d.ph==='m'&&down){smp.push({t:now,x:d.dx});while(smp.length>6||(smp.length>2&&now-smp[0].t>120))smp.shift();pos=rub(sp-d.dx/(pager.clientWidth||1));if(!rq){rq=requestAnimationFrame(function(){rq=0;render();});}}
+    else if(d.ph==='e'){up(!!d.c);}
+  });
 })();
 (function(){
   var done=false;
