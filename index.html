@@ -138,10 +138,10 @@ body{margin:0;padding:0;max-width:none;overflow:hidden;display:flex;flex-directi
 @media (prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
 /* carousel tab bar */
 #pill{display:none!important}
-#tclip{flex:1;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24%,#000 76%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 24%,#000 76%,transparent 100%)}
+#tclip{flex:1;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}
 #tstrip{display:grid}
-#tabs #tstrip .tab{grid-area:1/1;width:112px;will-change:transform;padding:12px 0;font-size:13px;letter-spacing:.06em;color:var(--tx)!important;transition:none}
-:root[data-style] #tabs #tstrip .tab{font-size:15px;letter-spacing:0;padding:11px 0}
+#tabs #tstrip .tab{grid-area:1/1;width:20%;will-change:transform;padding:12px 0;font-size:11px;letter-spacing:.03em;color:var(--tx)!important;transition:none}
+:root[data-style] #tabs #tstrip .tab{font-size:13px;letter-spacing:0;padding:11px 0}
 
 
 #rdBar{display:flex;gap:8px}
@@ -459,7 +459,7 @@ html:not(.boot) body{animation:bootin .32s ease}
   <div class="sub slb">Backup</div>
   <div style="display:flex;gap:8px"><button type="button" class="ghost sm" id="bkOut">Export</button><button type="button" class="ghost sm" id="bkIn">Import</button></div>
   <input type="file" id="bkF" accept=".json,application/json" hidden>
-  <div class="sub" style="margin-top:12px">build 168</div>
+  <div class="sub" style="margin-top:12px">build 169</div>
 </section>
 <div class="gf"><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg><span>Glance</span><svg class="gi" viewBox="140 140 232 232" aria-hidden="true"><g fill="currentColor"><circle cx="156" cy="256" r="14"/><circle cx="206" cy="256" r="14"/><circle cx="256" cy="256" r="14"/><circle cx="306" cy="256" r="14"/><circle cx="356" cy="256" r="14"/><circle cx="256" cy="206" r="14"/><circle cx="256" cy="156" r="14"/><circle cx="256" cy="306" r="14"/><circle cx="256" cy="356" r="14"/><circle cx="256" cy="256" r="30"/></g></svg></div></div></div>
 </div>
@@ -1235,7 +1235,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
   var wrap=document.getElementById('tabwrap'),lastY=new WeakMap();
   var N=pgs.length,pos=0,W=1,raf=0,lastCi=-1,PK='glance-page',strip=document.getElementById('tstrip'),clip=document.getElementById('tclip'),TW=112,CW=300;
   function wr(x){x=((x%N)+N)%N;return x>N/2?x-N:x;}
-  function meas(){TW=tabs[0].offsetWidth||112;CW=clip.clientWidth||300;}
+  function meas(){CW=clip.clientWidth||300;TW=CW/5;tabs.forEach(function(t){t.style.width=TW+'px';});}
   function setTh(){var h=wrap.offsetHeight;if(h)document.documentElement.style.setProperty('--th',h+'px');}
   setTh();window.addEventListener('resize',setTh);window.addEventListener('load',setTh);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(setTh);
   function showBar(){if(wrap.classList.contains('off'))wrap.classList.remove('off');}
@@ -1251,7 +1251,7 @@ if(S.lat!==null||S.city)loadWeather();else useLocation();
       g.style.transform='translate3d('+tx.toFixed(1)+'px,0,0) scale('+(1-0.1*a).toFixed(4)+')';
       g.style.zIndex=a<0.5?2:1;
     }
-    if(strip){for(var q=0;q<N;q++){var oq=wr(q-pos),dd=Math.abs(oq);tabs[q].style.transform='translate3d('+(CW/2-TW/2+oq*TW).toFixed(1)+'px,0,0)';tabs[q].style.opacity=(dd<1?1-0.62*dd:Math.max(0.15,0.38-0.2*(dd-1))).toFixed(3);}}
+    if(strip){for(var q=0;q<N;q++){var oq=wr(q-pos),dd=Math.abs(oq);tabs[q].style.transform='translate3d('+(CW/2-TW/2+oq*TW).toFixed(1)+'px,0,0) scale('+(1+0.2*Math.max(0,1-dd)).toFixed(3)+')';tabs[q].style.opacity=(dd<1?1-0.5*dd:dd<2?0.5-0.22*(dd-1):Math.max(0,0.28-0.28*(dd-2)*2)).toFixed(3);}}
     var ci=idx();
     if(ci!==lastCi){lastCi=ci;tabs.forEach(function(t,i){t.classList.toggle('on',i===ci);});save();var gf=document.getElementById('gameFrame');if(gf&&pgs[ci]===gf.parentNode&&!gf.getAttribute('src'))gf.setAttribute('src','touchline.html?embed=1');}
   }
