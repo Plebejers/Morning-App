@@ -18,7 +18,7 @@
 :root{--bg:#000;--card:#111;--card2:#1b1b1b;--line:#2a2a2a;--tx:#fff;--mu:#8a8a8a;--red:#e5392e;--grn:#1fb85a;--org:#e8742c}
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg)}
-body{background:var(--bg);color:var(--tx);font:15px/1.45 'Space Grotesk',system-ui,sans-serif;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(96px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font:15px/1.45 'Space Grotesk',system-ui,sans-serif;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(170px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;cursor:pointer}
 .nd,h1,h2{font-family:NDot,monospace;font-weight:400}
 #top{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 12px}
@@ -71,7 +71,7 @@ input[type=text]{width:100%;height:48px;border-radius:14px;border:1px solid var(
 .sty .btn,.sty .chip.on,.sty nav button.on{background:var(--acc);color:var(--acct);border-color:var(--acc)}
 .s-ios .card{border:0;border-radius:14px}.s-ios .chip,.s-ios .opt{border-radius:10px}.s-ios .btn{border-radius:12px}
 .s-material .card{border:0;border-radius:28px}.s-material .opt{border-radius:16px}
-.em body{padding-top:4px;padding-bottom:110px}
+.em body{padding-top:4px;padding-bottom:180px}
 .em nav{bottom:24px}
 .tp{position:relative;aspect-ratio:.82;border:1px solid var(--line);border-radius:16px;margin-top:12px;overflow:hidden}
 .tp:before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1px solid var(--line)}
@@ -84,6 +84,15 @@ input[type=text]{width:100%;height:48px;border-radius:14px;border:1px solid var(
 .seg button{flex:1;border:0;background:none;border-radius:999px;min-height:38px;font:700 12px 'Space Mono',monospace;color:var(--mu)}
 .seg button.on{background:var(--tx);color:var(--bg)}
 .attr{display:inline-block;margin-right:10px}
+.kob{position:fixed;left:50%;transform:translateX(-50%);width:min(calc(100% - 20px),500px);bottom:calc(84px + env(safe-area-inset-bottom));z-index:9}
+.kob .btn{margin:0;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.kob .btn:disabled{opacity:1;background:var(--card2);color:var(--mu);border:1px solid var(--line)}
+.em .kob{bottom:94px}
+.hasK{padding-bottom:84px}
+.sp{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:12px 0}
+.sp:first-of-type{border-top:0}
+.cmp{display:flex;align-items:center;gap:10px;margin-top:14px}
+.cmp .bar{flex:1;margin:0;height:6px;border-radius:3px}
 .g{color:var(--grn)}.r{color:var(--red)}.o{color:var(--org)}
 </style>
 </head>
@@ -123,6 +132,7 @@ var NEED={f442:[4,4,2],'4141':[4,5,1],'343':[3,4,3],'532':[5,3,2],'4321':[4,5,1]
 var ROWS={'433':[1,4,3,3],'442':[1,4,1,2,1,2],'352':[1,3,5,2],'4231':[1,4,2,3,1]};
 var TR={brave:['Brave on the ball','Keeps the ball under pressure. Better against pressing teams.'],off:['Switches off','Loses focus. Sometimes gifts a goal.'],late:['Late bloomer','Develops much faster from 17.'],big:['Big-game player','Lifts against stronger teams.'],work:['Workhorse','Barely tires, whatever you ask.'],fragile:['Fragile confidence','Confidence swings twice as hard.'],leader:['Leader','Lifts the whole team when he starts.'],quick:['Quick learner','Gets more out of every minute.']};
 var TRK=Object.keys(TR);
+var TRS={brave:'is brave on the ball',off:'switches off at times',late:'is a late bloomer',big:'is a big-game player',work:'is a workhorse',fragile:'has fragile confidence',leader:'is a natural leader',quick:'is a quick learner'};
 var FOC={bal:['Balanced','Steady all round.'],fit:['Fitness','Faster recovery between matches.'],tech:['Technical','Everyone develops a bit faster.'],youth:['Youth','15 and 16 year olds develop much faster, older players slower.']};
 var SLD={
  f442:[['GK','GK',0,50,91],['LB','DF','FB',13,71],['CB','DF',0,37,77],['CB','DF',0,63,77],['RB','DF','FB',87,71],['LM','MF','W',13,44],['CM','MF','CM',37,52,'bw'],['CM','MF','CM',63,52],['RM','MF','W',87,44],['ST','FW','ST',33,13],['ST','FW','ST',67,13,'tm']],
@@ -377,7 +387,7 @@ function finish(){
     if(p.tr.indexOf('fragile')>=0)dc*=2;p.cf=cl(p.cf+dc,0,100);
     if(p.gs>0){p.gs--;if(!p.gs){p.pot=Math.min(95,p.pot+3);p.o+=2;lines.push(first(p)+' has grown into his body. He looks like a different player.');}}
     var unk=p.tr.filter(function(t){return p.kn.indexOf(t)<0;});
-    if(unk.length&&p.ap>=3&&m>0&&Math.random()<0.3){var t=unk[0];p.kn.push(t);lines.push('Scout note: '+p.n+' is '+TR[t][0].toLowerCase()+'.');}
+    if(unk.length&&p.ap>=3&&m>0&&Math.random()<0.3){var t=unk[0];p.kn.push(t);lines.push('Scout note: '+p.n+' '+TRS[t]+'.');}
   });
   // players leaving
   G.sq.slice().forEach(function(p){if(p.m0>=6&&p.cf<25&&p.age>=16&&Math.random()<0.3){G.sq.splice(G.sq.indexOf(p),1);lines.push(p.n+' has left for '+teamName([])+'. He was not getting minutes.');G.dr-=6;}});
@@ -460,14 +470,14 @@ function boardBars(){
   return '<div style="display:flex;gap:16px;margin-top:12px">'+b('Chairman',G.ch)+b('Director',G.dr)+'</div>';
 }
 function head(){
-  return '<div class="card"><div class="sub">Season '+G.season+' &middot; '+esc(TN[G.tier])+'</div><h2 style="margin:6px 0 0">'+esc(G.club)+'</h2>'+boardBars()+'</div>';
+  return '<div class="card"><div class="sub">Season '+G.season+' &middot; '+esc(TN[G.tier])+'</div><h2 style="margin:6px 0 0;font-size:26px">'+esc(G.club)+'</h2>'+boardBars()+'</div>';
 }
 function vMatch(){
   if(TE&&G.phase==='pre')return vTac();
   if(G.phase==='m30'){var c=G.cur,e=ev30();
     return liveCard()+'<div class="card"><div class="lbl" style="margin-top:0">30 minutes</div><div style="font-size:17px">'+esc(e.t)+'</div>'+e.o.map(function(o,i){return '<button class="opt" data-a="e30" data-i="'+i+'"><b>'+esc(o[0])+'</b><span>'+esc(o[1])+'</span></button>';}).join('')+'</div>';}
   if(G.phase==='m70'){return liveCard()+'<div class="card"><div class="lbl" style="margin-top:0">70 minutes</div><div style="font-size:17px">'+(G.cur.s[0]>G.cur.s[1]?'You are ahead. Twenty minutes left.':G.cur.s[0]<G.cur.s[1]?'You are behind. Twenty minutes left.':'All square. Twenty minutes left.')+'</div>'+opts70().map(function(o,i){return '<button class="opt" data-a="e70" data-i="'+i+'"><b>'+esc(o.b)+'</b><span>'+esc(o.s)+'</span></button>';}).join('')+'</div>';}
-  if(G.phase==='ft')return ftCard()+'<button class="btn" data-a="cont">Next match</button>';
+  if(G.phase==='ft')return ftCard()+'<div class="kob"><button class="btn" data-a="cont">Next match</button></div>';
   if(G.phase==='eos')return eosCard();
   return preView();
 }
@@ -498,8 +508,8 @@ function eosCard(){
 var SEL=null,TE=false,TSEL=null;
 function tacPitch(tc,xi,edit){
   var asg=assign(xi,tc);
-  return '<div class="tp">'+SLD[tc.sh].map(function(s,i){var p=asg[i],r=roleAt(tc,i),su=r&&p?suit(p,r):0,cls=(edit&&TSEL===i?' on':'')+(r&&p?(su<-0.3?' bad':su>0.35?' good':''):'');
-    return '<button class="tpb'+cls+'" data-a="tsl" data-i="'+i+'" style="left:'+s[3]+'%;top:'+s[4]+'%">'+(r?RN[r][1]:s[0])+'<small>'+(p?esc(last(p)):'-')+'</small></button>';}).join('')+'</div>';
+  return '<div class="tp">'+SLD[tc.sh].map(function(s,i){var p=asg[i],r=roleAt(tc,i),su=r&&p?suit(p,r):0,cls=((edit&&TSEL===i)||(!edit&&p&&p.id===SEL)?' on':'')+(r&&p?(su<-0.3?' bad':su>0.35?' good':''):'');
+    return '<button class="tpb'+cls+'" data-a="tsl" data-i="'+i+'" style="left:'+s[3]+'%;top:'+s[4]+'%">'+(r?RN[r][1]:s[0])+'<small>'+(p?esc(last(p))+(p.ft<70?' <span class="o">'+Math.round(p.ft)+'%</span>':''):'-')+'</small></button>';}).join('')+'</div>';
 }
 function segc(a,v,names){return '<div class="seg">'+names.map(function(n,i){return '<button class="'+(v===i?'on':'')+'" data-a="'+a+'" data-i="'+i+'">'+n+'</button>';}).join('')+'</div>';}
 function tacSummary(tc){return SHN[tc.sh]+' &middot; '+LNN[tc.ln]+' line &middot; '+TPN[tc.tp]+' &middot; '+WDN[tc.wd];}
@@ -521,36 +531,45 @@ function vTac(){
 }
 function prow(p,a,on){return '<button class="opt" data-a="'+a+'" data-id="'+p.id+'" style="margin-top:6px;padding:10px 14px;'+(on?'border-color:var(--tx);background:var(--card2)':'')+'"><div class="row"><div style="min-width:0"><b style="display:inline">'+esc(p.n)+'</b> <span>'+p.pos+' &middot; '+p.age+(p.ft<70?' &middot; <span class="o">'+Math.round(p.ft)+'%</span>':'')+'</span></div><div class="nd" style="font-size:20px">'+Math.floor(eff(p))+'</div></div></button>';}
 function preView(){
-  var o=oppNow(),opp=G.tm[o.i],L=lineup(),h=head(),sc=scout();
+  var o=oppNow(),opp=G.tm[o.i],L=lineup(),h=head(),sc=scout(),tc=tac(),asg=assign(L.xi,tc);
   if(G.ev){h+='<div class="card"><div class="lbl" style="margin-top:0">News</div><div style="font-size:16px">'+esc(G.ev.t)+'</div>'+(G.ev.ch?G.ev.o.map(function(x,i){return '<button class="opt" data-a="ev" data-i="'+i+'"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></button>';}).join(''):'')+'</div>';}
-  var tb=order().indexOf(o.i)+1,f=G.tb[o.i];
+  var tb=order().indexOf(o.i)+1,f=G.tb[o.i],us=Math.round(xiStr(L.xi)),th=Math.round(opp.r),tot=Math.max(1,us+th);
   h+='<div class="card"><div class="sub">Matchday '+(G.md+1)+' of '+G.fx.length+' &middot; '+(o.home?'Home':'Away')+(G.rain?' &middot; Rain':'')+'</div><h2 style="margin-top:6px">'+esc(opp.n)+'</h2>'
-    +(f.p?'<div class="sub">'+tb+(tb===1?'st':tb===2?'nd':tb===3?'rd':'th')+' in the table &middot; W'+f.w+' D'+f.d+' L'+f.l+'</div>':'')
-    +'<div class="lbl">Scout report</div><div style="font-weight:600">Probably '+esc(ST[sc.st][0].toLowerCase())+'</div><div class="sub">'+esc(ST[sc.st][1])+'</div>'
-    +'<div class="row" style="margin-top:8px"><span class="sub">'+esc(sc.note)+'</span><span class="sub '+(sc.cf<65?'o':'')+'">'+sc.cf+'% sure</span></div>'
-    +'<div class="row" style="margin-top:14px"><div><div class="sub">Them</div><div class="ovr" style="text-align:left">'+Math.round(opp.r)+'</div></div><div style="text-align:right"><div class="sub">Your XI</div><div class="ovr">'+Math.round(xiStr(L.xi))+'</div></div></div></div>';
-  h+='<div class="card"><div class="row"><div class="lbl" style="margin:0">Tactic</div><button class="chip" style="min-height:34px" data-a="tedit">Edit</button></div><div class="chips" style="margin-top:10px">'+G.tacs.map(function(x,i){return '<button class="chip'+(G.ti===i?' on':'')+'" data-a="tpick" data-i="'+i+'">'+esc(x.n)+'</button>';}).join('')+'</div>'
-    +'<div class="sub" style="margin-top:10px">'+tacSummary(tac())+'</div>'+tacPitch(tac(),L.xi,false);
-  if(L.g&&!L.man){var ov=G.gam&&L.over?L.over:null;h+='<div class="lbl">Gamble</div><button class="opt" data-a="gam" style="'+(G.gam?'border-color:var(--tx)':'')+'"><b>'+(G.gam?'✓ ':'')+'Start '+esc(L.g.n)+'</b><span>'+L.g.age+', '+PN[L.g.pos]+', potential '+potStars(L.g)+(ov?'. Ahead of '+esc(ov.n)+'.':'. Tap to start him.')+'</span></button>';}
-  var ord={GK:0,DF:1,MF:2,FW:3},xi=L.xi.slice().sort(function(a,b){return ord[a.pos]-ord[b.pos]||eff(b)-eff(a);}),pp=posPen(L.xi,G.sh);
-  h+='<div class="row" style="margin-top:16px"><div class="lbl" style="margin:0">Starting XI'+(L.man?' (your pick)':'')+'</div>'+(L.man?'<button class="chip" style="min-height:34px" data-a="auto">Auto pick</button>':'')+'</div>';
-  if(pp.gk!==1)h+='<div class="sub r" style="margin-top:6px">'+(pp.gk?'Two keepers on the pitch.':'No keeper in the team!')+'</div>';else if(pp.off)h+='<div class="sub o" style="margin-top:6px">'+pp.off+' out of position for '+SHN[G.sh]+'.</div>';
-  h+='<div class="sub" style="margin-top:6px">Tap a player to swap him.</div>'+xi.map(function(p){return prow(p,'xs',p.id===SEL);}).join('');
-  if(SEL&&L.xi.some(function(p){return p.id===SEL;})){var sp=byId(SEL),bench=G.sq.filter(function(p){return L.xi.indexOf(p)<0;}).sort(function(a,b){return (b.pos===sp.pos)-(a.pos===sp.pos)||eff(b)-eff(a);});
-    h+='<div class="lbl">Bring in for '+esc(first(sp))+'</div>'+bench.map(function(p){return prow(p,'bs',false);}).join('');}
-  h+='<button class="btn" data-a="ko"'+(G.ev&&G.ev.ch?' disabled':'')+'>Kick off</button></div>';
-  h+='<div class="card"><div class="lbl" style="margin-top:0">Inbox</div>'+G.inbox.slice(0,6).map(function(m){return '<div class="msg">'+esc(m.t)+'</div>';}).join('')+'</div>';
+    +(f.p?'<div class="sub">'+tb+(tb===1?'st':tb===2?'nd':tb===3?'rd':'th')+' &middot; W'+f.w+' D'+f.d+' L'+f.l+'</div>':'')
+    +'<div class="cmp"><span class="nd" style="font-size:22px">'+us+'</span><div class="bar"><i style="width:'+(us/tot*100).toFixed(0)+'%"></i></div><span class="nd" style="font-size:22px">'+th+'</span></div><div class="row"><span class="sub">Your XI</span><span class="sub">Them</span></div>'
+    +'<div class="lbl">Scout report &middot; <span class="'+(sc.cf<65?'o':'')+'">'+sc.cf+'% sure</span></div><div style="font-weight:600">Probably '+esc(ST[sc.st][0].toLowerCase())+'</div><div class="sub">'+esc(ST[sc.st][1])+' '+esc(sc.note)+'</div></div>';
+  h+='<div class="card"><div class="chips">'+G.tacs.map(function(x,i){return '<button class="chip'+(G.ti===i?' on':'')+'" data-a="tpick" data-i="'+i+'">'+esc(x.n)+'</button>';}).join('')+'<button class="chip" data-a="tedit">Edit &rarr;</button></div>'
+    +'<div class="sub" style="margin-top:10px">'+tacSummary(tc)+'</div>'+tacPitch(tc,L.xi,false);
+  var pp=posPen(L.xi,G.sh);
+  h+='<div class="row" style="margin-top:10px"><span class="sub">'+(SEL?'':'Tap a player to change his role or swap him.')+(pp.gk!==1?'<span class="r">'+(pp.gk?'Two keepers on the pitch.':'No keeper in the team!')+'</span>':pp.off?' <span class="o">'+pp.off+' out of position.</span>':'')+'</span>'+(L.man?'<button class="chip" style="min-height:34px;flex:none" data-a="auto">Auto pick</button>':'')+'</div>';
+  var si=SEL?asg.map(function(p){return p&&p.id;}).indexOf(SEL):-1;
+  if(si>=0){var sp=asg[si],s=SLD[tc.sh][si],cur=roleAt(tc,si);
+    h+='<div style="border-top:1px solid var(--line);margin-top:12px;padding-top:12px"><div class="row"><div><b>'+esc(sp.n)+'</b> <span class="sub">'+s[0]+' &middot; '+sp.age+' &middot; '+potStars(sp)+' &middot; '+Math.round(sp.ft)+'% fit</span></div><span class="nd" style="font-size:22px">'+Math.floor(eff(sp))+'</span></div>'
+      +'<div class="sub" style="margin-top:4px">'+['pac','pas','wrk'].map(function(k){return '<span class="attr">'+AN[k]+' '+attr(sp,k)+'</span>';}).join('')+'</div>';
+    if(s[2]){h+='<div class="chips" style="margin-top:10px">'+RG[s[2]].map(function(r){var ft=fitTxt(suit(sp,r));return '<button class="chip'+(r===cur?' on':'')+'" data-a="prole" data-k="'+r+'" data-i="'+si+'">'+RN[r][0]+'</button>';}).join('')+'</div>';
+      var cf=fitTxt(suit(sp,cur));h+='<div class="sub" style="margin-top:8px">'+RN[cur][3]+' <span class="'+cf[1]+'">'+cf[0]+' for him.</span></div>';}
+    var bench=G.sq.filter(function(p){return L.xi.indexOf(p)<0;}).sort(function(a,b){return (b.pos===sp.pos)-(a.pos===sp.pos)||((a.pos==='GK')-(b.pos==='GK'))||(cur?suit(b,cur)-suit(a,cur):0)*3+eff(b)-eff(a);});
+    h+='<div class="lbl">Swap with</div>'+bench.map(function(p){var ft=cur?fitTxt(suit(p,cur)):['',''];return '<button class="sp" data-a="bs" data-id="'+p.id+'"><div class="row"><div><b>'+esc(p.n)+'</b> <span class="sub">'+p.pos+' &middot; '+p.age+(p.ft<70?' &middot; <span class="o">'+Math.round(p.ft)+'%</span>':'')+(cur&&p.pos===sp.pos?' &middot; <span class="'+ft[1]+'">'+ft[0]+'</span>':'')+(p.rest?' &middot; resting':'')+'</span></div><span class="nd" style="font-size:20px">'+Math.floor(eff(p))+'</span></div></button>';}).join('')+'</div>';}
+  if(L.g&&!L.man){var ov=G.gam&&L.over?L.over:null;h+='<button class="opt" data-a="gam" style="margin-top:14px;'+(G.gam?'border-color:var(--tx)':'')+'"><b>'+(G.gam?'✓ ':'')+'Gamble: start '+esc(L.g.n)+'</b><span>'+L.g.age+', '+PN[L.g.pos]+', potential '+potStars(L.g)+(ov?'. Ahead of '+esc(ov.n)+'.':'.')+'</span></button>';}
+  h+='</div>';
+  h+='<div class="card"><div class="lbl" style="margin-top:0">Inbox</div>'+G.inbox.slice(0,4).map(function(m){return '<div class="msg">'+esc(m.t)+'</div>';}).join('')+'</div>';
+  h+='<div class="kob"><button class="btn" data-a="ko"'+(G.ev&&G.ev.ch?' disabled':'')+'>'+(G.ev&&G.ev.ch?'Answer the news first':'Kick off')+'</button></div>';
   return h;
 }
+var SQX=null;
 function vSquad(){
   var h='<div class="card"><div class="lbl" style="margin-top:0">Training focus</div><div class="chips">'+Object.keys(FOC).map(function(k){return '<button class="chip'+(G.foc===k?' on':'')+'" data-a="foc" data-k="'+k+'">'+FOC[k][0]+'</button>';}).join('')+'</div><div class="sub" style="margin-top:8px">'+esc(FOC[G.foc][1])+'</div></div>';
   ['GK','DF','MF','FW'].forEach(function(pos){
     var ps=G.sq.filter(function(p){return p.pos===pos;}).sort(function(a,b){return b.o-a.o;});
     h+='<div class="card"><div class="lbl" style="margin-top:0">'+PN[pos]+'s</div>'+ps.map(function(p){
-      var gn=p.o-p.s0;
-      return '<div class="pl"><div class="row"><div style="flex:1;min-width:0"><div style="font-weight:600">'+esc(p.n)+(p.gs?' <span class="o sub">growing</span>':'')+'</div><div class="sub">'+p.age+' &middot; '+potStars(p)+' &middot; fit '+Math.round(p.ft)+'%'+(gn>=0.5?' &middot; <span class="g">+'+gn.toFixed(1)+'</span>':'')+'</div></div><div class="ovr">'+Math.floor(p.o)+'</div></div>'
-       +'<div class="sub" style="margin-top:4px">'+['pac','pas','wrk'].map(function(k){return '<span class="attr">'+AN[k]+' '+attr(p,k)+'</span>';}).join('')+'</div>'+'<div class="row" style="margin-top:6px"><div style="flex:1"><div class="sub">Confidence</div><div class="bar"><i style="width:'+p.cf+'%;background:'+(p.cf<30?'var(--red)':'var(--tx)')+'"></i></div></div><button class="chip'+(p.rest?' on':'')+'" style="min-height:36px" data-a="rest" data-id="'+p.id+'">Rest</button></div>'
-       +'<div>'+p.tr.map(function(t){return p.kn.indexOf(t)>=0?'<span class="tag k">'+esc(TR[t][0])+'</span>':'<span class="tag">?</span>';}).join('')+'</div></div>';
+      var gn=p.o-p.s0,x=SQX===p.id;
+      var r='<button class="sp" data-a="sqx" data-id="'+p.id+'"><div class="row"><div style="min-width:0"><b>'+esc(p.n)+'</b>'+(p.rest?' <span class="tag k" style="margin:0 0 0 6px">Resting</span>':'')+(p.gs?' <span class="sub o">growing</span>':'')
+        +'<div class="sub">'+p.age+' &middot; '+potStars(p)+' &middot; '+Math.round(p.ft)+'%'+(gn>=0.5?' &middot; <span class="g">+'+gn.toFixed(1)+'</span>':'')+(p.cf<30?' &middot; <span class="r">low confidence</span>':'')+'</div>'
+        +'<div class="sub">'+['pac','pas','wrk'].map(function(k){return '<span class="attr">'+AN[k]+' '+attr(p,k)+'</span>';}).join('')+'</div></div><div class="ovr">'+Math.floor(p.o)+'</div></div></button>';
+      if(x)r+='<div style="padding:0 0 14px"><div class="row"><div style="flex:1"><div class="sub">Confidence</div><div class="bar"><i style="width:'+p.cf+'%;background:'+(p.cf<30?'var(--red)':'var(--tx)')+'"></i></div></div><button class="chip'+(p.rest?' on':'')+'" style="min-height:36px" data-a="rest" data-id="'+p.id+'">'+(p.rest?'Resting':'Rest next match')+'</button></div>'
+        +'<div>'+p.tr.map(function(t){return p.kn.indexOf(t)>=0?'<span class="tag k">'+esc(TR[t][0])+'</span>':'<span class="tag">Unknown trait</span>';}).join('')+'</div>'
+        +'<div class="sub" style="margin-top:8px">'+p.ap+' appearances. Best role: '+(function(){var b=null,bv=-9;Object.keys(RN).forEach(function(rr){var g=Object.keys(RG).filter(function(k){return RG[k].indexOf(rr)>=0;});var ok=pos==='GK'?false:pos==='DF'?g.indexOf('FB')>=0:pos==='MF'?(g.indexOf('CM')>=0||g.indexOf('AM')>=0||g.indexOf('W')>=0||g.indexOf('FB')>=0):g.indexOf('ST')>=0||g.indexOf('W')>=0;if(ok&&suit(p,rr)>bv){bv=suit(p,rr);b=rr;}});return b?RN[b][0].toLowerCase():'keeper';})()+'.</div></div>';
+      return r;
     }).join('')+'</div>';
   });
   return h;
@@ -603,7 +622,9 @@ $('app').addEventListener('click',function(e){
   else if(a==='auto'){G.lu=null;SEL=null;}
   else if(a==='tedit'){TE=true;TSEL=null;render();scrollTo(0,0);return;}
   else if(a==='tdone'){TE=false;TSEL=null;render();scrollTo(0,0);return;}
-  else if(a==='tsl'){if(!TE){TE=true;TSEL=i;render();scrollTo(0,0);return;}TSEL=TSEL===i?null:i;}
+  else if(a==='tsl'){if(!TE){var as=assign(lineup().xi,tac()),pp=as[i];SEL=pp&&SEL!==pp.id?pp.id:null;render();return;}TSEL=TSEL===i?null:i;}
+  else if(a==='prole'){tac().r[i]=b.getAttribute('data-k');}
+  else if(a==='sqx'){var id2=+b.getAttribute('data-id');SQX=SQX===id2?null:id2;render();return;}
   else if(a==='tpick'){G.ti=i;TSEL=null;syncTac();}
   else if(a==='tren'){var nn=prompt('Name this tactic',tac().n);if(nn&&nn.trim())tac().n=nn.trim().slice(0,18);}
   else if(a==='tsh'){var tc=tac();if(tc.sh!==b.getAttribute('data-k')){tc.sh=b.getAttribute('data-k');tc.r={};TSEL=null;}syncTac();}
